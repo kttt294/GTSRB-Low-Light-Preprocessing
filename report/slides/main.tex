@@ -546,7 +546,8 @@ CLAHE rồi Gaussian trừ Gaussian rồi CLAHE:\par
 $\Delta$ Macro-F1 trung bình: $+0,17$ / $+0,11$ / $+0,15$ điểm phần trăm.\par\vspace{3mm}
 Một số checkpoint/noise seed có chiều ngược lại.\par
 Gaussian--Gamma chỉ so cả hai thứ tự trên validation và subset.
-\takeaway{Khoảng cách nhỏ chưa chứng minh ưu thế thống kê.}
+\par\vspace{2mm}Bootstrap 95\%: CI chỉ ảnh dương; CI lấy mẫu cả checkpoint chứa 0.
+\takeaway{Chưa đủ bằng chứng về ưu thế ổn định khi huấn luyện lại.}
 
 \end{frame}
 
@@ -587,7 +588,16 @@ Không dùng $H-D$ thay cho chênh lệch Macro-F1.
 \end{frame}
 
 \paperreference{}
-\begin{frame}{6.2. Kết luận và giới hạn}
+\begin{frame}{6.2. Website demo}
+\centering
+\includegraphics[width=.90\linewidth,height=5.55cm,keepaspectratio]{../latex/images/demo/website-severe.png}\par
+\vspace{1mm}
+{\small\href{https://image-preprocessing.techvi.io.vn}{\textcolor{Teal}{\textbf{image-preprocessing.techvi.io.vn}}}}
+\note{Mở đường link để demo trực tiếp. Mẫu 00009.ppm ở mức tối nặng được sửa từ dự đoán sai 80 km/h sang đúng Đi thẳng sau Gaussian rồi Gamma. Đây là ví dụ minh họa, kết luận hiệu quả dựa trên full-test.}
+\end{frame}
+
+\paperreference{}
+\begin{frame}{6.3. Kết luận và giới hạn}
 
 \textbf{Ba kết luận}\par
 Khử nhiễu kết hợp tăng sáng cải thiện F1 trong giao thức đã xét.\par
@@ -596,7 +606,7 @@ Thứ tự phụ thuộc phép xử lý và cấu hình.\par\vspace{3mm}
 \textbf{Giới hạn}\par
 ROI có sẵn, nhiễu RGB tổng hợp, một kiến trúc CNN.\par
 Chưa đánh giá camera đêm thực, detector hoặc video.\par
-Chưa kết luận ý nghĩa thống kê cho các khoảng cách nhỏ.
+Ưu thế thứ tự nhỏ, chưa ổn định theo biến động huấn luyện.
 \par\vspace{3mm}{\color{Teal}\large\bfseries Cảm ơn thầy cô và các bạn!}
 \par\vspace{2mm}{\small\textbf{Demo:} \url{https://image-preprocessing.techvi.io.vn}}
 

@@ -2,9 +2,9 @@
 
 Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Low-Light-Preprocessing).
 
-Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu và slide kết thúc.
+Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu, slide website demo và slide kết thúc.
 
-24 slide tiếng Việt, tỉ lệ 16:9, phù hợp khoảng 18–20 phút. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề và header bảng màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
+28 slide tiếng Việt, tỉ lệ 16:9, phù hợp khoảng 18–20 phút. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề và header bảng màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
 
 - `main.tex`: mã nguồn LaTeX, có ghi chú `\note{...}` cho từng slide.
 - `../thuyet_trinh.pdf`: bản trình chiếu cuối.
@@ -33,7 +33,7 @@ Máy hiện có MiKTeX, Beamer, PGFPlots và Arial. Không cài thêm dependency
 
 ## Nội dung và nguồn
 
-Các bảng chính, ablation và tương quan thuộc notebook ResNet-18 trên 430 ảnh. Slide 21 là full-test 12.630 ảnh từ README của dự án, được ghi rõ là lần chạy riêng. Không dùng chất lượng ảnh subset ghép với F1 full-test. Không dùng số liệu của classifier cũ.
+Các kết quả được đối chiếu với báo cáo hiện tại và bằng chứng từ ZIP Kaggle đã kiểm chứng. Phân biệt subset 430 ảnh với full-test 12.630 ảnh; không ghép metric ảnh của phạm vi này với F1 của phạm vi khác. Slide thứ tự xử lý trình bày giới hạn của khoảng tin cậy bootstrap khi lấy mẫu checkpoint. Slide website sử dụng ảnh chụp thật do nhóm cung cấp.
 
 Thanh footer chỉ hiển thị paper liên quan theo tác giả, hội nghị/tạp chí và năm; có thể bấm để mở bài báo. Slide không có paper để trống ô giữa. Thông tin truy vết notebook/code được giữ trong `\note`, không xuất hiện trong PDF trình chiếu. Báo cáo đầy đủ và dẫn nguồn học thuật nằm ở `../bao_cao.pdf`.
 

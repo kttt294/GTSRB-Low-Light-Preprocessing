@@ -1,7 +1,7 @@
 {
   "branch": "main",
-  "pdf_pages": 42,
-  "pdf_sha256": "2ab3aaaa807d0bf2b36fc7c99dc4292f866d50f2a4dec77b5b79aeaf9ee1bca9",
+  "pdf_pages": 44,
+  "pdf_sha256": "1937c43f93e9f0ab55c95542a8b45881e05f8342b5dea255d349e0c8deb16315",
   "latex_reference_or_overflow_errors": [],
   "unit_tests_passed": 38,
   "notebook_schema_valid": true,
@@ -51,8 +51,8 @@
   "direct_zip_public_download_verified": true,
   "direct_zip_download_verified_on_kaggle": true,
   "baseline_reuse_verified_on_kaggle": true,
-  "slides_pages": 27,
-  "slides_sha256": "98963f2701e9808634d35ced5d0e49eedbd412333093983d22496025898cbf8f",
+  "slides_pages": 28,
+  "slides_sha256": "6f71eef7cac2aebfe39911a71111e749ac124f77d9ac74248e16e0e36aa9c491",
   "all_scope_raw_prediction_rows_recomputed": 5847990,
   "report_current_evidence": "report/evidence/final/",
   "report_chosen_pipeline": "Gaussian 5x5 sigma0.8 then Gamma0.8",
@@ -62,7 +62,7 @@
   "kaggle_embedded_source_config_files": 22,
   "presentation_clahe_clip_limit": 1,
   "speaker_notes_local_only": true,
-  "speaker_notes_slides": 27,
+  "speaker_notes_slides": 28,
   "repository": "https://github.com/kttt294/GTSRB-Low-Light-Preprocessing",
   "report_repository_link_verified": true,
   "visual_error_examples": 6,
@@ -77,5 +77,12 @@
   "reviewer_comments_addressed": 11,
   "demo_url": "https://image-preprocessing.techvi.io.vn",
   "report_demo_link_verified": true,
-  "slides_demo_link_verified": true
+  "slides_demo_link_verified": true,
+  "demo_screenshot_count": 4,
+  "demo_screenshot_pdf_pages": [
+    40,
+    41
+  ],
+  "demo_screenshot_visual_review": "Four original screenshots checked; two figures per page, captions and website link verified.",
+  "slides_demo_screenshot_page": 27
 }

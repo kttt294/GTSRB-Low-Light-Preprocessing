@@ -1,0 +1,25 @@
+{
+  "description": "Ảnh chụp website do thành viên nhóm cung cấp; giữ nguyên nội dung ảnh.",
+  "screenshots": [
+    {
+      "source": "C:\\Users\\trang\\Pictures\\Screenshots\\Screenshot 2026-10-25 165545.png",
+      "report_image": "report/latex/images/demo/website-original.png",
+      "sha256": "175ba900b93e1032d29938cb97fc607be3ff2716752329c5b97fbac892e949fb"
+    },
+    {
+      "source": "C:\\Users\\trang\\Pictures\\Screenshots\\Screenshot 2026-10-25 165607.png",
+      "report_image": "report/latex/images/demo/website-mild.png",
+      "sha256": "7d2fb570201cb7c3df8610e3eedd81a32adfea423f29c525a486c3bde2b53743"
+    },
+    {
+      "source": "C:\\Users\\trang\\Pictures\\Screenshots\\Screenshot 2026-10-25 165636.png",
+      "report_image": "report/latex/images/demo/website-medium.png",
+      "sha256": "4d8e33324695feb1b214a42008480063d2b5b2a0ed052baadaad7d3dd1e7cb6e"
+    },
+    {
+      "source": "C:\\Users\\trang\\Pictures\\Screenshots\\Screenshot 2026-10-25 165622.png",
+      "report_image": "report/latex/images/demo/website-severe.png",
+      "sha256": "b437f4301f817d160c970d37301c12f8c4f62d79f8dea200fd5901f71511ef58"
+    }
+  ]
+}

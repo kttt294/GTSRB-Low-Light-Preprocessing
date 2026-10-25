@@ -1,0 +1,30 @@
+\clearpage
+\subsection{Website demo}
+Website tại \url{https://image-preprocessing.techvi.io.vn} cho phép chọn ảnh và mức suy giảm, so sánh trước--sau Gaussian $\rightarrow$ Gamma, đối chiếu dự đoán ResNet-18 với nhãn đúng.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{demo/website-original.png}
+\caption{Demo với ảnh gốc 00496.ppm: dự đoán đổi từ ``Ưu tiên tại giao lộ'' sang đúng nhãn ``Băng tuyết'' sau xử lý.}
+\label{fig:demo-original}
+\end{figure}
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{demo/website-mild.png}
+\caption{Demo với ảnh tối nhẹ 00052.ppm: nhãn ``Cấm xe cơ giới'' được dự đoán đúng cả trước và sau xử lý.}
+\label{fig:demo-mild}
+\end{figure}
+\clearpage
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{demo/website-medium.png}
+\caption{Demo với ảnh tối vừa 00095.ppm: dự đoán giữ đúng nhãn ``Hết mọi lệnh cấm'' sau xử lý.}
+\label{fig:demo-medium}
+\end{figure}
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.90\linewidth]{demo/website-severe.png}
+\caption{Demo với ảnh tối nặng 00009.ppm: dự đoán sai ``80 km/h'' trước xử lý được sửa thành đúng nhãn ``Đi thẳng''.}
+\label{fig:demo-severe}
+\end{figure}
+\srcnote{Ảnh chụp website demo của nhóm. Các ví dụ minh họa thuộc bộ mẫu demo, không dùng để ước lượng tỷ lệ cải thiện trên toàn bộ dữ liệu.}
