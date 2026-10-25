@@ -1,0 +1,9 @@
+# Only needed to rebuild the precomputed bundle. The deployed site and local
+# static server need none of these packages. Keep a compatible torch/vision pair.
+numpy
+pillow
+torch
+torchvision
+opencv-python-headless
+scikit-image
+PyYAML

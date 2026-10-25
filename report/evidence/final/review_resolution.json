@@ -1,0 +1,63 @@
+{
+  "review_file": "danh_sach_loi_can_sua_bao_cao_xu_ly_anh.md",
+  "base_results_archive_sha256": "c09dfbeafeacfff98e1e21429d5078aa6dfde2ce2a5a774c130dc966a4cf1e6f",
+  "original_metrics_changed": false,
+  "new_training_or_kaggle_run_required": false,
+  "items": [
+    {
+      "item": 1,
+      "assessment": "confirmed presentation issue",
+      "action": "Added paragraph boundaries around tables and figures; checked complete sentences around the full-test tables."
+    },
+    {
+      "item": 2,
+      "assessment": "indexing inconsistency, not a metric-computation bug",
+      "action": "Macro-F1 summation and class variable now use class IDs 0..42, matching src/metrics.py; original metrics unchanged."
+    },
+    {
+      "item": 3,
+      "assessment": "cumulative overline notation already present; definition incomplete",
+      "action": "Defined beta_s, alpha_s and cumulative product alpha_bar_t; cited the primary DDPM paper."
+    },
+    {
+      "item": 4,
+      "assessment": "experimental branch was labeled but the diagram could be clearer",
+      "action": "Separated simulated evaluation and application inputs; only simulated branch generates degradation."
+    },
+    {
+      "item": 5,
+      "assessment": "valid request for deeper error analysis",
+      "action": "Computed class-5 prediction frequency, wrong assignment rate and precision from audited confusion matrices; separated observations from causal hypotheses."
+    },
+    {
+      "item": 6,
+      "assessment": "already implemented before this review",
+      "action": "Retained six official examples and 12 reproduced predictions with image-label-checkpoint provenance."
+    },
+    {
+      "item": 7,
+      "assessment": "valid uncertainty-analysis request",
+      "action": "Computed 2000 paired stratified image bootstraps and hierarchical checkpoint/image bootstraps; added 95% intervals and conditional-scope limits."
+    },
+    {
+      "item": 8,
+      "assessment": "valid modeling limitation",
+      "action": "Explained S(R(X)) versus R(S(X)), variance under linear interpolation, output correlations and camera pipeline limitations without inventing an ablation."
+    },
+    {
+      "item": 9,
+      "assessment": "existing controlled design needed an explicit optimization caveat",
+      "action": "Clarified standalone parameter selection isolates order at fixed strengths; not joint or global optimization."
+    },
+    {
+      "item": 10,
+      "assessment": "valid readability issue",
+      "action": "Split four confusion matrices across two large figures, and split per-class F1 into two class ranges."
+    },
+    {
+      "item": 11,
+      "assessment": "valid primary-reference gap",
+      "action": "Added original CLAHE, MSR, bilateral and NLM works plus DDPM and bootstrap references; ordered references by first citation."
+    }
+  ]
+}

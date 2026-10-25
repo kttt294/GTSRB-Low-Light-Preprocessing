@@ -53,7 +53,7 @@ HE sử dụng thống kê toàn ảnh, nên vùng nền sáng và vùng biển 
 
 \subsection{Cân bằng histogram thích nghi có giới hạn tương phản (CLAHE)}
 \subsubsection{Từ xử lý toàn cục đến xử lý cục bộ}
-CLAHE chia ảnh thành một lưới ô và xây dựng phép ánh xạ histogram cho từng ô. Cách tiếp cận cục bộ giúp xử lý các vùng có điều kiện chiếu sáng khác nhau. Tuy nhiên, nếu cân bằng cục bộ không giới hạn, một vùng gần như đồng nhất có thể bị kéo giãn tương phản mạnh và làm nhiễu nổi rõ. CLAHE giải quyết điều này bằng cách giới hạn chiều cao histogram trước khi xây dựng CDF.
+CLAHE~\cite{clahe_original} chia ảnh thành một lưới ô và xây dựng phép ánh xạ histogram cho từng ô. Cách tiếp cận cục bộ giúp xử lý các vùng có điều kiện chiếu sáng khác nhau. Tuy nhiên, nếu cân bằng cục bộ không giới hạn, một vùng gần như đồng nhất có thể bị kéo giãn tương phản mạnh và làm nhiễu nổi rõ. CLAHE giải quyết điều này bằng cách giới hạn chiều cao histogram trước khi xây dựng CDF.
 
 Quy trình gồm bốn bước: tính histogram mỗi ô; cắt các bin vượt ngưỡng; phân phối lại lượng dư; xây dựng ánh xạ và nội suy giữa các ô. Nội suy ở ranh giới giúp giảm hiện tượng xuất hiện các khối vuông sau xử lý. Trong triển khai của dự án, toàn bộ phép này được áp dụng trên kênh Y, tương tự HE.
 
@@ -70,6 +70,7 @@ Với ô nhỏ, các giá trị clip limit danh nghĩa khác nhau có thể tạ
 \textbf{Ưu điểm:} tăng tương phản theo vùng, kiểm soát tốt hơn sự khuếch đại histogram và có chi phí tính toán thấp hơn nhiều so với các bộ phục hồi sâu. \textbf{Hạn chế:} vẫn có thể làm nhiễu rõ hơn; chất lượng phụ thuộc tương tác giữa clip limit, lưới và độ phân giải.
 
 \subsection{Retinex đa tỉ lệ (Multi-Scale Retinex)}
+Cơ sở MSR dựa trên công trình của Jobson, Rahman và Woodell~\cite{msr_original}; biến thể dưới đây được giản lược theo mã nguồn của dự án.
 \subsubsection{Mô hình phản xạ và chiếu sáng}
 Retinex xem ảnh quan sát là tích của thành phần phản xạ $R$ và chiếu sáng $L$:
 \begin{equation}

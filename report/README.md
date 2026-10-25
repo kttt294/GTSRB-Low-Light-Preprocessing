@@ -1,5 +1,7 @@
 # Báo cáo bài tập lớn môn Xử lý ảnh
 
+Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Low-Light-Preprocessing).
+
 Đề tài: **Khảo sát ảnh hưởng của xử lý ảnh đến hiệu năng nhận dạng biển báo giao thông trong điều kiện thiếu sáng.**
 
 - [Báo cáo PDF](bao_cao.pdf) · [Slide PDF](thuyet_trinh.pdf).
@@ -21,6 +23,22 @@ python report/latex/build_assets.py --archive outputs/kaggle-20261025-v2/gtsrb-n
 ```
 
 Thư mục kiểm chứng phải mới. Bộ sinh bảng chỉ chấp nhận ZIP có hash khớp biên bản và đủ cả bốn phạm vi; không trích số từ notebook lịch sử. Dùng Python, NumPy, Matplotlib và PyTorch của dự án.
+
+Trang đối chiếu sáu mẫu dùng ảnh test và nhãn chính thức. Đặt hai archive `GTSRB_Final_Test_Images.zip` và `GTSRB_Final_Test_GT.zip` trong `data/raw/gtsrb/`, rồi chạy:
+
+```powershell
+python report/latex/visual_cases.py --archive outputs/kaggle-20261025-v2/gtsrb-notebook-results.zip
+```
+
+Công cụ kiểm tra checksum, ROI, nhãn và suy luận lại 12 đầu vào bằng checkpoint 11; không huấn luyện lại. Giữ hai ID nhỏ nhất mỗi nhóm được giúp/bị làm sai/vẫn sai, dùng cùng thang hiển thị. Kết quả kiểm chứng và hash ảnh nằm trong `evidence/final/visual_cases_audit.json`. Các archive ảnh gốc chỉ giữ local.
+
+Phân tích độ bất định và tập trung dự đoán dùng cùng ZIP đã kiểm chứng:
+
+```powershell
+python report/latex/review_analysis.py --archive outputs/kaggle-20261025-v2/gtsrb-notebook-results.zip --repetitions 2000
+```
+
+Công cụ ghép 682.020 dòng dự đoán của hai thứ tự Gaussian–CLAHE, đối chiếu từng ma trận và tính hai khoảng percentile 95%: lấy mẫu ảnh phân tầng theo lớp, và lấy mẫu thêm nhóm checkpoint. Các noise seed không được coi là ảnh độc lập. CSV, hash và giới hạn suy luận ở `evidence/final/review_analysis_audit.json`; cache dự đoán và các lượt bootstrap chỉ giữ local. Công cụ cũng sinh bảng tập trung dự đoán vào lớp 5 và các hình confusion/F1 có cỡ chữ lớn hơn. Không train lại hoặc chọn lại pipeline bằng test.
 
 ## Biên dịch PDF
 

@@ -13,10 +13,12 @@ r=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
 {\sqrt{\sum_i(x_i-\bar x)^2}\sqrt{\sum_i(y_i-\bar y)^2}}.
 \end{equation}
 Spearman là Pearson trên thứ hạng, dùng thứ hạng trung bình khi bằng nhau.
+\par
 \begin{table}[!htbp]\centering
 \caption{Tương quan trên full-test, $n=8$ phương pháp tăng sáng/đối chứng mỗi hàng.}
 \begin{tabular}{lllrr}\toprule Mức & Chất lượng & Nhận dạng & Pearson & Spearman\\\midrule
-\tableinput{tables/correlations}\bottomrule\end{tabular}\label{tab:corr}\end{table}
+\tableinput{tables/correlations}\bottomrule\end{tabular}\label{tab:corr}\end{table}\par
+
 
 Spearman giữa PSNR và Macro-F1 giảm từ 0,667 ở mức nhẹ xuống 0,357 ở mức vừa và 0,286 ở mức nặng. Với SSIM và Macro-F1, các giá trị tương ứng là 0,714; 0,738 và 0,619. SSIM phù hợp hơn với thứ hạng F1 trong tám phương án này, nhưng phản ví dụ Gaussian--diffusion cho thấy nó cũng không thể chọn thay metric nhận dạng.
 \fig{subset_scatter.png}{1}{PSNR/SSIM và Macro-F1 mức vừa trên full-test. Mỗi điểm là phương pháp, không phải một ảnh độc lập.}{fig:scatter}
@@ -25,10 +27,12 @@ Tám điểm là quy mô nhỏ và chia sẻ ảnh, nhiễu, checkpoint. Một p
 
 \subsection{Ablation: tách độ tối và từng thành phần nhiễu}
 Ablation giữ $\gamma_d=2,2$, checkpoint và tham số tăng sáng; thay riêng bốn mô hình suy giảm: chỉ Gamma, thêm Gaussian $\sigma=0,01$, thêm Poisson $p=60$, và thêm cả hai. Ma trận có $4\times3\times8\times3=288$ lượt trên 430 ảnh. Với Gamma-only, noise seed không tạo ảnh mới nên không xem là nguồn quan sát độc lập.
+\par
 \begin{table}[!htbp]\centering
 \caption{Macro-F1 (\%) khi tách thành phần suy giảm; cùng tham số xử lý đã chọn.}
 {\small\begin{tabular}{lrrrr}\toprule Phương pháp & Chỉ Gamma & + Gaussian & + Poisson & + Cả hai\\\midrule
-\tableinput{tables/ablation}\bottomrule\end{tabular}}\label{tab:ablation}\end{table}
+\tableinput{tables/ablation}\bottomrule\end{tabular}}\label{tab:ablation}\end{table}\par
+
 
 MSR đạt 98,36\% với Gamma-only nhưng còn 57,84\% khi thêm cả hai nhiễu. Zero-DCE giảm từ 97,49\% xuống 68,90\%; diffusion từ 94,74\% xuống 78,89\%. Kết quả củng cố yêu cầu xét nhiễu khi đánh giá tăng sáng. Không thể kết luận Poisson luôn nghiêm trọng hơn Gaussian vì hai mức nhiễu chưa được cân bằng về năng lượng.
 \fig{ablation.pdf}{1}{Ảnh hưởng từng thành phần suy giảm trên subset, tính từ bảng ablation cùng gói kết quả.}{fig:ablation}
@@ -36,18 +40,24 @@ MSR đạt 98,36\% với Gamma-only nhưng còn 57,84\% khi thêm cả hai nhi�
 \subsection{Diễn giải hiệu quả khử nhiễu và thứ tự}
 Gaussian giảm dao động cục bộ, phù hợp với một thành phần nhiễu được cài trực tiếp trong mô hình suy giảm. Đặt trước Gamma có thể hạn chế khuếch đại nhiễu vùng tối. Đổi lại, bộ lọc làm mềm nét số và biên. F1 tốt trong mô hình nhiễu tổng hợp không bảo đảm tốt với lóa đèn, nhòe chuyển động hoặc nhiễu cảm biến thực.
 
+Khoảng tin cậy chỉ lấy mẫu ảnh của cặp Gaussian--CLAHE nhỏ và dương, nhưng khoảng có lấy mẫu checkpoint đều chứa 0. Cần phân biệt một thay đổi nhất quán trong các mô hình đã giữ cố định với ưu thế ổn định khi huấn luyện lại. Kết quả không hỗ trợ quy tắc thứ tự chung cho mọi bộ lọc.
+
 Bilateral và NLM có cơ chế giữ biên hoặc dùng độ tương tự mảnh ảnh, nhưng không mặc nhiên tốt hơn Gaussian trên crop nhỏ. Lưới tham số hữu hạn; NLM còn có lượng tử hóa 8 bit và chuyển màu nội bộ. Chênh lệch thuộc cả cấu hình triển khai, không tách riêng nguyên lý lọc khỏi mọi bước chuyển đổi.
+\par
 \begin{table}[!htbp]\centering
 \caption{PSNR (dB) / SSIM trên full-test của các phương pháp đã sàng lọc.}
 {\fontsize{10.5bp}{12bp}\selectfont\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
-\tableinput{tables/extension_quality}\bottomrule\end{tabular}}\label{tab:extquality}\end{table}
+\tableinput{tables/extension_quality}\bottomrule\end{tabular}}\label{tab:extquality}\end{table}\par
+
 
 \subsection{Chi phí xử lý và giới hạn triển khai}
+\par
 \begin{table}[!htbp]\centering
 \caption{Độ trễ enhancer mức vừa trên full-test nhóm tăng sáng, ms/ảnh.}
 \begin{tabular}{lr}\toprule Phương pháp & Thời gian\\\midrule
-\tableinput{tables/latency}\bottomrule\end{tabular}\label{tab:latency}\end{table}
+\tableinput{tables/latency}\bottomrule\end{tabular}\label{tab:latency}\end{table}\par
+
 
 GPU thực nghiệm là Tesla T4. Phép truyền thống chạy CPU; mô hình sâu chạy GPU theo adapter. Thời gian enhancer loại trừ tạo nhiễu, I/O, metric và CNN; chưa phải độ trễ camera. Ở phiên khảo sát khử nhiễu, Gaussian rồi Gamma đo khoảng 0,293 ms/ảnh và CLAHE rồi Gaussian khoảng 0,688 ms/ảnh mức vừa. Đối chứng tăng sáng dùng lại từ phiên khác, nên tỷ số thời gian giữa đối chứng và chuỗi mới không phải phép đo tốc độ có kiểm soát trong cùng phiên.
 
-Thí nghiệm giới hạn ở RGB $64\times64$, ROI có sẵn, một kiến trúc CNN, ba checkpoint và một mô hình thiếu sáng tổng hợp. Chưa có dữ liệu camera đêm thực, detector, video hoặc kiểm định ý nghĩa thống kê cho từng chênh lệch nhỏ. Lưới tham số hữu hạn và enhancer học trên miền khác; tối ưu chỉ có nghĩa tốt nhất theo validation trong tập phương án đã xét.
+Thí nghiệm giới hạn ở RGB $64\times64$, ROI có sẵn, một kiến trúc CNN, ba checkpoint và một mô hình thiếu sáng tổng hợp. Chưa có dữ liệu camera đêm thực, detector hoặc video. Bootstrap ở Bảng~\ref{tab:orderci} chỉ khảo sát cặp Gaussian--CLAHE với ba checkpoint và ba noise seed cố định, không xác lập ưu thế cho mọi cấu hình hay quần thể camera. Lưới tham số hữu hạn và enhancer học trên miền khác; tối ưu chỉ có nghĩa tốt nhất theo validation trong tập phương án đã xét.

@@ -17,12 +17,12 @@ Retinexformer dùng khung một giai đoạn gồm ước lượng chiếu sáng
 Trong sơ đồ này $\widehat{L}$ là bản đồ nâng sáng và $F_L$ là đặc trưng chiếu sáng; biểu thức mô tả vai trò các khối, không thay thế toàn bộ công thức attention của bài báo. Khác với MSR giản lược, bộ phục hồi có tham số học được và tận dụng quan hệ không cục bộ. Tuy nhiên, trọng số LOL-v1 không được tối ưu riêng cho crop biển báo có nét rất nhỏ và nhiễu Poisson--Gaussian đang xét. Hiệu năng thấp hơn CLAHE trên GTSRB vì thế không phủ định kết quả của phương pháp trên các benchmark gốc.
 
 \subsubsection{Wavelet và diffusion có điều kiện}
-Biến đổi wavelet tách ảnh thành thành phần tần số thấp $LL$ và các thành phần chi tiết $LH,HL,HH$. Phương pháp Wavelet-based Diffusion LLIE sử dụng diffusion có điều kiện trong miền wavelet kết hợp khôi phục thành phần tần số cao~\cite{diffusion}. Công thức nhiễu thuận điển hình của diffusion là:
+Biến đổi wavelet tách ảnh thành thành phần tần số thấp $LL$ và các thành phần chi tiết $LH,HL,HH$. Phương pháp Wavelet-based Diffusion LLIE sử dụng diffusion có điều kiện trong miền wavelet kết hợp khôi phục thành phần tần số cao~\cite{diffusion}. Công thức nhiễu thuận điển hình của diffusion là~\cite{ddpm}:
 \begin{equation}
 z_t=\sqrt{\overline{\alpha}_t}\,z_0+
 \sqrt{1-\overline{\alpha}_t}\,\epsilon,\qquad \epsilon\sim\mathcal{N}(0,I).
 \end{equation}
-Ở đây $z_0$ là biểu diễn đích trong miền mà diffusion làm việc, không phải công thức tạo thiếu sáng của dự án. Khi suy luận, mô hình dùng điều kiện từ ảnh tối và nhiều bước khử nhiễu để ước lượng biểu diễn phục hồi trước khi tái tạo ảnh. Phân tách tần số giúp giải thích vì sao phương pháp có thể xử lý đồng thời chiếu sáng và chi tiết; không có bảo đảm rằng mọi nét số nhỏ đều được giữ đúng.
+Đặt $\beta_s\in(0,1)$ là phương sai nhiễu ở bước $s$, $\alpha_s=1-\beta_s$ và $\overline{\alpha}_t=\prod_{s=1}^{t}\alpha_s$ là tích lũy đến bước $t$, không phải hệ số riêng của một bước. Ở đây $z_0$ là biểu diễn đích trong miền mà diffusion làm việc, không phải công thức tạo thiếu sáng của dự án. Khi suy luận, mô hình dùng điều kiện từ ảnh tối và nhiều bước khử nhiễu để ước lượng biểu diễn phục hồi trước khi tái tạo ảnh. Phân tách tần số giúp giải thích vì sao phương pháp có thể xử lý đồng thời chiếu sáng và chi tiết; không có bảo đảm rằng mọi nét số nhỏ đều được giữ đúng.
 
 Thiết lập 10 bước, EMA và sampler của tác giả là cấu hình suy luận trong dự án. Không huấn luyện một diffusion mới trên GTSRB và không dùng nhãn biển báo để cập nhật bộ tăng cường. Độ trễ đã đo chỉ cho khối tăng cường crop; không quy đổi trực tiếp thành FPS camera.
 

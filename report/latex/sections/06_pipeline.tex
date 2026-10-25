@@ -5,18 +5,29 @@ Mục tiêu là nhận dạng đủ 43 lớp, nên Macro-F1 validation dùng đ�
 Quy trình được chọn không nhất thiết cao nhất ở mọi ô test. CLAHE rồi Gaussian có điểm test mức nặng nhỉnh hơn, nhưng thay lựa chọn sau khi thấy test sẽ làm sai vai trò tập kiểm tra. Mục tiêu khác, như ràng buộc độ trễ, cần được xác định và đánh giá bằng validation.
 
 \subsection{Quy trình được lựa chọn}
-\begin{figure}[!htbp]\centering\setlength{\fboxsep}{7pt}
+\par\begin{figure}[!htbp]\centering\setlength{\fboxsep}{7pt}
 \fbox{\parbox{0.88\linewidth}{\centering
-Ảnh và ROI GTSRB\\[3pt]$\downarrow$\\[3pt]
-Crop + lề 5\%, RGB $64\times64$, chia 255\\[3pt]$\downarrow$\\[3pt]
-Trong thực nghiệm: Gamma làm tối $\to$ Poisson $\to$ Gaussian $\to$ clip\\[3pt]$\downarrow$\\[3pt]
+\begin{minipage}[t]{0.47\linewidth}\centering
+\textbf{A. Đánh giá mô phỏng}\par
+Ảnh gốc GTSRB + ROI\\[3pt]$\downarrow$\\[3pt]
+Crop + lề 5\%, RGB $64\times64$\\[3pt]$\downarrow$\\[3pt]
+Gamma làm tối, Poisson,\\Gaussian và clip
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\linewidth}\centering
+\textbf{B. Luồng áp dụng}\par
+ROI thiếu sáng đã có sẵn\\[3pt]$\downarrow$\\[3pt]
+Crop + lề, RGB $64\times64$\\[3pt]$\downarrow$\\[3pt]
+Giữ ảnh thiếu sáng đầu vào\\(không sinh suy giảm)
+\end{minipage}\par\vspace{5pt}
+$\searrow\qquad\qquad\swarrow$\\[3pt]
+\textbf{Khối xử lý chung: RGB float32 trong $[0,1]$}\\[3pt]$\downarrow$\\[3pt]
 Gaussian $5\times5$, $\sigma=0,8$, biên phản xạ\\[3pt]$\downarrow$\\[3pt]
 Gamma tăng sáng $\alpha=0,8$ trên RGB float32\\[3pt]$\downarrow$\\[3pt]
 Resize $224\times224$ + chuẩn hóa ImageNet một lần\\[3pt]$\downarrow$\\[3pt]
 ResNet-18 cố định $\to$ một trong 43 lớp
-}}\caption{Quy trình chọn trên validation. PSNR/SSIM tính ở $64\times64$ trước resize CNN.}\label{fig:pipeline}\end{figure}
+}}\caption{Hai nguồn đầu vào dùng chung chuỗi được chọn trên validation. Chỉ nhánh A sinh suy giảm và dùng ảnh gốc để tính PSNR/SSIM ở $64\times64$; nhánh B mô tả cách áp dụng, chưa được đánh giá trên ảnh camera thực.}\label{fig:pipeline}\end{figure}\par
 
-Crop thiếu sáng thực đi trực tiếp vào khối lọc và Gamma sau chuẩn hóa, không làm tối thêm. Nhãn và ảnh sáng tham chiếu không được đưa vào pipeline. Bộ đánh giá mới dùng ảnh tham chiếu để đo chất lượng và nhãn để chấm phân loại. Bộ lọc dùng \texttt{BORDER\_REFLECT\_101}; không có chuyển 8 bit trong chuỗi Gaussian--Gamma.
+Crop thiếu sáng thực đi trực tiếp vào khối lọc và Gamma sau chuẩn hóa. Luồng này giả định ROI đã được cung cấp, không bổ sung detector. Nhãn và ảnh sáng tham chiếu không được đưa vào pipeline. Bộ đánh giá mới dùng ảnh tham chiếu để đo chất lượng và nhãn để chấm phân loại. Bộ lọc dùng \texttt{BORDER\_REFLECT\_101}; không có chuyển 8 bit trong chuỗi Gaussian--Gamma.
 
 Đầu ra được kiểm tra kích thước, ba kênh, miền giá trị và tính hữu hạn. Ba checkpoint giữ nguyên, không thích nghi theo test. Điểm validation và F1 full-test không tự tạo thành bảo đảm an toàn cho hệ thống hỗ trợ lái xe.
 
@@ -26,4 +37,4 @@ Identity, Gamma, CLAHE, diffusion và Gaussian đơn lẻ giúp phân biệt l�
 Mã xử lý ở \path{src/degradation.py}, \path{src/enhancement.py} và \path{src/tools/processing_pipeline.py}. \path{src/tools/processing_study.py} chọn tham số, khóa giao thức; \path{src/metrics.py} tính metric; cấu hình ở \path{configs/}. Tham số, split, mã ảnh và hash checkpoint đi kèm kết quả để tái lập từng phép so sánh.
 
 \subsection{Hướng đánh giá tiếp theo}
-Ưu tiên dữ liệu thiếu sáng thực có nhãn tương thích, kiểm tra lỗi nét số/biên/màu và toàn cảnh có detector. Không có ảnh sáng ghép cặp chính xác thì không tính PSNR/SSIM như thí nghiệm tổng hợp. Cần thêm kiến trúc nhận dạng, điều kiện thu nhận và kiểm định ghép cặp có kiểm soát để khẳng định ưu thế ngoài trung bình mô tả hiện tại.
+Ưu tiên dữ liệu thiếu sáng thực có nhãn tương thích, kiểm tra lỗi nét số/biên/màu và toàn cảnh có detector. Không có ảnh sáng ghép cặp chính xác thì không tính PSNR/SSIM như thí nghiệm tổng hợp. Cần thêm kiến trúc nhận dạng, điều kiện thu nhận và lần huấn luyện độc lập. Khi có track test đáng tin cậy, nên lấy mẫu lại theo track thay cho từng ảnh; khoảng bootstrap hiện tại chưa xử lý được nguồn phụ thuộc này.

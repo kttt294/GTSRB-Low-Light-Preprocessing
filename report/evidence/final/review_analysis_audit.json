@@ -1,0 +1,68 @@
+{
+  "result_archive_sha256": "c09dfbeafeacfff98e1e21429d5078aa6dfde2ce2a5a774c130dc966a4cf1e6f",
+  "status": "completed",
+  "script_sha256": "7f7bd59ba80a61799ac5672db2ce6e82a6d72f8202347ef9bf040544896d7c64",
+  "prediction_rows_paired": 682020,
+  "images": 12630,
+  "checkpoint_noise_pairs": [
+    [
+      11,
+      101
+    ],
+    [
+      11,
+      202
+    ],
+    [
+      11,
+      303
+    ],
+    [
+      22,
+      101
+    ],
+    [
+      22,
+      202
+    ],
+    [
+      22,
+      303
+    ],
+    [
+      33,
+      101
+    ],
+    [
+      33,
+      202
+    ],
+    [
+      33,
+      303
+    ]
+  ],
+  "bootstrap": {
+    "repetitions": 2000,
+    "seed": 20261025,
+    "method": "paired class-stratified image percentile bootstrap and paired hierarchical checkpoint/image bootstrap",
+    "resampling_unit": "official test source image; same multiplicity for both methods and every fixed checkpoint/noise pair",
+    "aggregation": "Macro-F1 per run, mean noise within checkpoint, then mean checkpoints",
+    "interval": "marginal 95% percentile; three conditions, no multiplicity correction",
+    "checkpoint_resampling": "Resample three training-seed clusters with replacement; preserve the three noise runs within each chosen checkpoint; same image multiplicities across all clusters and both methods",
+    "limitations": "Only three training clusters, three fixed noises; image independence assumed, no verified official test tracks; not a population CI for real cameras"
+  },
+  "class_5_support": 630,
+  "class_5_true_percent": 4.98812351543943,
+  "labels_sha256": "90dbce9392b7eec7db1b1f1f13ea73598b72822efaaf9f608c935064fad29db2",
+  "paired_predictions_sha256": "f23d2af7e98568b2c8e2b101fb831a3138b33bf89fc58cd38c6fe717d5549924",
+  "files": {
+    "report/evidence/final/order_bootstrap.csv": "14d1209616386b63b9e3a35e89002b8073c64d423f2e762e154e243e566ead6b",
+    "report/evidence/final/class5_concentration.csv": "d39d8d457bf20d9c5bb8c2dcefe84b8817140cf3ee30db3047569c80d5838121",
+    "report/latex/tables/order_bootstrap.tex": "bf6df2147406920586af9f65f97c6b1fde293ebd59015d5ad0ac67e2a081161d",
+    "report/latex/tables/class5_concentration.tex": "fee08937c3e4739b20aad425719bc11141bd70d913b01cce90055e1e5fbc19af",
+    "report/latex/images/confusions_detail_1.png": "4b6fa9ee428b3a30f476262b016a8270e476a5b8f4cc68b736d9826d3557844c",
+    "report/latex/images/confusions_detail_2.png": "a25041cf2be9e072a6c14945d3bc4f94f0f0769d985afdadc576d51c06f16d59",
+    "report/latex/images/per_class_severe_detail.png": "8c631b7173e5a417ddc81e521016864306cf00e9893f5bfaaad54025e41eae22"
+  }
+}

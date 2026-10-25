@@ -1,0 +1,28 @@
+{
+  "checked_date": "2026-10-25",
+  "sources": {
+    "clahe_original": {
+      "doi": "10.1016/B978-0-12-336156-1.50061-6",
+      "primary_source": "https://www.cse.unr.edu/~bebis/CS474/StudentPaperPresentations/1994%20-%20CLAHE.pdf"
+    },
+    "msr_original": {
+      "doi": "10.1109/83.597272",
+      "primary_source": "https://ntrs.nasa.gov/api/citations/19990005051/downloads/19990005051.pdf"
+    },
+    "bilateral": {
+      "doi": "10.1109/ICCV.1998.710815",
+      "primary_source": "https://users.soe.ucsc.edu/~manduchi/Papers/ICCV98.pdf"
+    },
+    "nlm": {
+      "doi": "10.1109/CVPR.2005.38",
+      "primary_source": "https://web.eecs.utk.edu/~hqi/ece692/references/noise-NLM-cvpr05.pdf"
+    },
+    "ddpm": {
+      "primary_source": "https://arxiv.org/abs/2006.11239"
+    },
+    "bootstrap": {
+      "doi": "10.1214/aos/1176344552",
+      "primary_source": "https://projecteuclid.org/journals/annals-of-statistics/volume-7/issue-1/Bootstrap-Methods-Another-Look-at-the-Jackknife/10.1214/aos/1176344552.full"
+    }
+  }
+}

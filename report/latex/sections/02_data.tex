@@ -4,6 +4,7 @@ German Traffic Sign Recognition Benchmark (GTSRB) là bộ dữ liệu phân lo�
 
 Một số ảnh huấn luyện được chụp liên tiếp từ cùng một biển báo. Những ảnh thuộc cùng chuỗi quan sát có mức tương đồng cao. Nếu chia train và validation ngẫu nhiên ở cấp ảnh, các khung gần giống nhau có thể xuất hiện ở cả hai tập, làm kết quả validation lạc quan hơn khả năng tổng quát thực tế. Vì vậy, dự án chia dữ liệu theo lớp và \term{track}, giữ các ảnh cùng track trong một tập.
 
+\par
 \begin{table}[htbp]
 \centering
 \caption{Phân chia dữ liệu trong quy trình ResNet-18.}
@@ -20,7 +21,8 @@ Test khảo sát & 430 & 10 ảnh/lớp cho notebook và ablation \\
 \bottomrule
 \end{tabular}
 \label{tab:splits}
-\end{table}
+\end{table}\par
+
 
 Tập cách ly gồm 30 ảnh thuộc track có ảnh trùng pixel với tập test, theo kiểm kê được ghi trong dự án. Toàn bộ track được tách ra để tránh chỉ loại những ảnh trùng chính xác nhưng vẫn giữ các khung gần kề. Tổng số ảnh train, validation và cách ly bằng 39.209; test chính thức được giữ riêng. Hạt giống chia dữ liệu là 42.
 
@@ -66,6 +68,7 @@ Trước bước chặn, nhiễu Poisson trong công thức~\eqref{eq:poisson} c
 
 Nhiễu Gaussian được cộng với độ lệch chuẩn cố định cho mọi pixel. Trong mô hình này, nó đại diện cho một thành phần nhiễu cộng đơn giản. Khi tín hiệu sau Gamma nhỏ, cùng một mức nhiễu Gaussian sẽ gây ảnh hưởng tương đối lớn hơn đến nội dung. Bước chặn cuối cùng bảo đảm ảnh nằm trong miền hợp lệ, nhưng cũng làm phân bố nhiễu gần 0 hoặc 1 không còn hoàn toàn đối xứng.
 
+\par
 \begin{table}[htbp]
 \centering
 \caption{Ba mức suy giảm sử dụng trong thí nghiệm.}
@@ -79,9 +82,15 @@ Nặng (severe) & 3,0 & 30 & 0,020 \\
 \bottomrule
 \end{tabular}
 \label{tab:degrade}
-\end{table}
+\end{table}\par
+
 
 Ba mức trong Bảng~\ref{tab:degrade} thay đổi đồng thời độ tối và hai thành phần nhiễu. Vì vậy, sự chênh lệch giữa mức nhẹ và mức nặng phản ánh tổng tác động của cả ba yếu tố. Muốn xác định riêng ảnh hưởng của nhiễu, cần dùng thí nghiệm ablation giữ nguyên Gamma và lần lượt bật/tắt từng loại nhiễu, được trình bày ở phần thảo luận.
+
+\subsubsection{Nhiễu sau nội suy và giới hạn mô hình}
+Nghiên cứu cắt và resize ảnh gốc về $64\times64$ trước khi sinh nhiễu. Gọi $R$ là toán tử lấy mẫu lại và $S$ là phép suy giảm, đầu vào đang xét là $S(R(X))$, khác với $R(S(X))$. Với nhiễu cộng độc lập ở độ phân giải nguồn, một pixel nội suy $\sum_j w_j(X_j+\varepsilon_j)$ có phương sai nhiễu $\sigma^2\sum_j w_j^2$; các pixel đầu ra dùng chung lân cận còn có thể tương quan. Trong khi đó, thêm Gaussian sau resize dùng phương sai $\sigma_n^2$ trực tiếp tại từng pixel crop. Poisson phụ thuộc tín hiệu và Gamma phi tuyến càng khiến hai thứ tự không tương đương.
+
+Thiết kế này giữ kích thước và mức nhiễu đầu vào thống nhất để cô lập ảnh hưởng của tiền xử lý. Nó không tái hiện chuỗi cảm biến RAW, giải khảm màu, xử lý tín hiệu, nội suy và nén của camera. Gaussian đơn giản có thể phù hợp với một thành phần được tạo trực tiếp trong mô hình, nên lợi ích đo được chưa chứng minh ưu thế với nhiễu đã qua xử lý camera. Chưa có ablation đổi vị trí sinh nhiễu hoặc độ phân giải để định lượng độ lệch này; không suy diễn mức độ ảnh hưởng chỉ từ lập luận lý thuyết.
 
 \subsection{Khảo sát histogram và cấu trúc ảnh}
 \fig{degradation.png}{1}{Ảnh tham chiếu và ba mức suy giảm trên cùng một crop validation. Hàng dưới là histogram cường độ xám; trục đứng biểu thị số pixel. Hình trích trực tiếp từ notebook ResNet-18, noise seed 101.}{fig:degradation}

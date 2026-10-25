@@ -47,7 +47,7 @@
 \newcommand{\tableinput}[1]{\@@input #1 }
 \renewcommand{\l@section}[2]{\addpenalty{-\@highpenalty}\vskip 2pt{\bfseries\@dottedtocline{1}{0pt}{1.5em}{#1}{#2}}}
 \makeatother
-\newcommand{\fig}[4]{\begin{figure}[!htbp]\centering\includegraphics[width=#2\linewidth]{#1}\caption{#3}\label{#4}\end{figure}}
+\newcommand{\fig}[4]{\par\begin{figure}[!htbp]\centering\includegraphics[width=#2\linewidth]{#1}\caption{#3}\label{#4}\end{figure}\par}
 \begin{document}
 \hypersetup{pageanchor=false}
 \input{sections/cover}

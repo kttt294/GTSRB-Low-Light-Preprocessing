@@ -1,0 +1,259 @@
+{
+  "status": "official_labels_and_all_12_predictions_verified",
+  "result_archive_sha256": "c09dfbeafeacfff98e1e21429d5078aa6dfde2ce2a5a774c130dc966a4cf1e6f",
+  "prediction_member": "08_processing_extension/fulltest/predictions.csv",
+  "condition": "medium",
+  "noise_seed": 101,
+  "train_seed": 11,
+  "checkpoint_sha256": "1eb63e6c674f592c066eded4b02923c093019264a2be1db757f1015936ad7164",
+  "method": "pre__gaussian__gamma",
+  "pipeline": {
+    "steps": [
+      {
+        "kind": "denoise",
+        "method": "gaussian",
+        "params": {
+          "kernel": 5,
+          "sigma": 0.8
+        }
+      },
+      {
+        "kind": "enhance",
+        "method": "gamma",
+        "params": {
+          "gamma": 0.8
+        }
+      }
+    ]
+  },
+  "selection": "Two smallest sample IDs per helped/harmed/still_wrong group, unchanged from representative_cases.csv",
+  "image_sources": [
+    {
+      "url": "https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/GTSRB_Final_Test_Images.zip",
+      "md5": "c7e4e6327067d32654124b0fe9e82185",
+      "sha256": "48ba6fab7e877eb64eaf8de99035b0aaecfbc279bee23e35deca4ac1d0a837fa"
+    },
+    {
+      "url": "https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/GTSRB_Final_Test_GT.zip",
+      "md5": "fe31e9c9270bbcd7b84b7f21a9d9d9e5",
+      "sha256": "f94e5a7614d75845c74c04ddb26b8796b9e483f43541dd95dd5b726504e16d6d"
+    }
+  ],
+  "display": "Same RGB [0,1] scale; nearest-neighbor magnification, no per-image contrast normalization",
+  "class_names": "Vietnamese descriptions of GTSRB IDs; IDs remain the canonical labels",
+  "inference_device": "cpu",
+  "source_comparison": "Exact UTF-8 source text after CRLF/LF normalization",
+  "true_probability_tolerance": 0.0001,
+  "packages": {
+    "numpy": "2.2.6",
+    "torch": "2.14.1+cpu"
+  },
+  "figure_sha256": "2b72586dcee81ce71fc5332a6940fc8fc4147b366420c6fc0224d59ccfc8a86e",
+  "script_sha256": "09968186a74339f5aebc3d5347526b98acd6e9a3201ad7a03e57a3b103397094",
+  "cases": [
+    {
+      "sample_id": "gtsrb/test/00010",
+      "category": "helped",
+      "class_id": "12",
+      "before": "40",
+      "after": "12",
+      "official_class_id": 12,
+      "official_roi": [
+        6,
+        5,
+        33,
+        32
+      ],
+      "padded_crop_box": [
+        4,
+        3,
+        36,
+        35
+      ],
+      "source_image_sha256": "1eb028be3bacd33b8c165ee06b3713d6658b7d1632669ab5411392a62223e6dd",
+      "clean_float32_sha256": "bd1aa38d2afebc0ec16cb35a93bf17029bf08c9cd3aee51e91d1dcd85850c2d5",
+      "dark_float32_sha256": "37fb6aad2117c3271585fde4d74d765b58e4473e72cb8309fe22e31c03164ae9",
+      "enhanced_float32_sha256": "0c1006e4244bdd738ff23a25235ee92e07b3aecf6b4f9a2cf3e39b2c95c98020",
+      "before_archived_prediction": 40,
+      "before_archived_true_probability": 0.05368546023964882,
+      "after_archived_prediction": 12,
+      "after_archived_true_probability": 0.29574573040008545,
+      "before_local_prediction": 40,
+      "before_local_true_probability": 0.05368524789810181,
+      "before_true_probability_absolute_delta": 2.123415470123291e-07,
+      "after_local_prediction": 12,
+      "after_local_true_probability": 0.29574650526046753,
+      "after_true_probability_absolute_delta": 7.748603820800781e-07
+    },
+    {
+      "sample_id": "gtsrb/test/00020",
+      "category": "helped",
+      "class_id": "4",
+      "before": "5",
+      "after": "4",
+      "official_class_id": 4,
+      "official_roi": [
+        5,
+        6,
+        27,
+        28
+      ],
+      "padded_crop_box": [
+        3,
+        4,
+        30,
+        31
+      ],
+      "source_image_sha256": "a3365c39b540a97d28645f242a0d295e8585d36441684a8ac53c1036fb9046ad",
+      "clean_float32_sha256": "3f744f83e30800a7cad48ffffbcbb95de2543968debd7c56c8cbd7d5edf8b673",
+      "dark_float32_sha256": "7ee857821d949932dd7cadcf8f51ae97d91e317c9c1c12813dd50ffdd25a098b",
+      "enhanced_float32_sha256": "3ca1ae37efa5c0a0efeeedf4dae552c00f5e46ca72b97ae8a880d258139b6fac",
+      "before_archived_prediction": 5,
+      "before_archived_true_probability": 0.024055562913417816,
+      "after_archived_prediction": 4,
+      "after_archived_true_probability": 0.981088399887085,
+      "before_local_prediction": 5,
+      "before_local_true_probability": 0.024055853486061096,
+      "before_true_probability_absolute_delta": 2.905726432800293e-07,
+      "after_local_prediction": 4,
+      "after_local_true_probability": 0.9810881614685059,
+      "after_true_probability_absolute_delta": 2.384185791015625e-07
+    },
+    {
+      "sample_id": "gtsrb/test/00176",
+      "category": "harmed",
+      "class_id": "3",
+      "before": "3",
+      "after": "5",
+      "official_class_id": 3,
+      "official_roi": [
+        6,
+        6,
+        24,
+        25
+      ],
+      "padded_crop_box": [
+        5,
+        5,
+        26,
+        27
+      ],
+      "source_image_sha256": "fbf72846c0dd4c1bfb0302963ca64d2a444f3c933a144e1fa951b8e4f5214641",
+      "clean_float32_sha256": "2b27916e33dd8b29822a32005ce5755db7270e226d231a7e9a7233305f185e48",
+      "dark_float32_sha256": "5780552da7e378947b8274d9c38449f29d00e316875ae6a8095745c51c9f10c8",
+      "enhanced_float32_sha256": "c4a1736f4b5c533235cff5e6d6f96bbadcd46aed87548f50ef9ee956d06550f8",
+      "before_archived_prediction": 3,
+      "before_archived_true_probability": 0.47974544763565063,
+      "after_archived_prediction": 5,
+      "after_archived_true_probability": 0.36822959780693054,
+      "before_local_prediction": 3,
+      "before_local_true_probability": 0.4797438979148865,
+      "before_true_probability_absolute_delta": 1.5497207641601562e-06,
+      "after_local_prediction": 5,
+      "after_local_true_probability": 0.36822962760925293,
+      "after_true_probability_absolute_delta": 2.9802322387695312e-08
+    },
+    {
+      "sample_id": "gtsrb/test/00513",
+      "category": "harmed",
+      "class_id": "22",
+      "before": "22",
+      "after": "19",
+      "official_class_id": 22,
+      "official_roi": [
+        5,
+        5,
+        56,
+        50
+      ],
+      "padded_crop_box": [
+        2,
+        2,
+        60,
+        54
+      ],
+      "source_image_sha256": "bef9946c554f1b863130445569727f84bb7c25c6da08637a53dc305252b0b658",
+      "clean_float32_sha256": "17026f927760c62618553a5346b5b7e9f8b60fbaada775bdfa1dbc41f07e1d9a",
+      "dark_float32_sha256": "1a23295d455a40bcf43329b3e7cbbedd3e97ec4e59defd45f83151d7550b411a",
+      "enhanced_float32_sha256": "c55bc4cfed263a376507b921cca3230dfc0498ee5d520e0f79cf564fba3935be",
+      "before_archived_prediction": 22,
+      "before_archived_true_probability": 0.5226065516471863,
+      "after_archived_prediction": 19,
+      "after_archived_true_probability": 0.25463491678237915,
+      "before_local_prediction": 22,
+      "before_local_true_probability": 0.5226123929023743,
+      "before_true_probability_absolute_delta": 5.841255187988281e-06,
+      "after_local_prediction": 19,
+      "after_local_true_probability": 0.25463759899139404,
+      "after_true_probability_absolute_delta": 2.682209014892578e-06
+    },
+    {
+      "sample_id": "gtsrb/test/00012",
+      "category": "still_wrong",
+      "class_id": "23",
+      "before": "5",
+      "after": "5",
+      "official_class_id": 23,
+      "official_roi": [
+        7,
+        7,
+        72,
+        67
+      ],
+      "padded_crop_box": [
+        3,
+        3,
+        77,
+        72
+      ],
+      "source_image_sha256": "956355150e08af22c88e21353159332137b6d4c4cfeb006eed80beb67477d137",
+      "clean_float32_sha256": "7ce351a4a888353b02ac85bad11e0ee0fb3a2dfd02bae5e839e62ed941c35689",
+      "dark_float32_sha256": "fd26390c0847889c83d8200a901b8aebec75988283bcfa7cb70d3f8c4e7ba15c",
+      "enhanced_float32_sha256": "265659037124ae48af194d9f1dc709b1b03a932b74ca986b1ba848261fb19b64",
+      "before_archived_prediction": 5,
+      "before_archived_true_probability": 0.010752723552286625,
+      "after_archived_prediction": 5,
+      "after_archived_true_probability": 0.015839943662285805,
+      "before_local_prediction": 5,
+      "before_local_true_probability": 0.010752714239060879,
+      "before_true_probability_absolute_delta": 9.313225746154785e-09,
+      "after_local_prediction": 5,
+      "after_local_true_probability": 0.015839915722608566,
+      "after_true_probability_absolute_delta": 2.7939677238464355e-08
+    },
+    {
+      "sample_id": "gtsrb/test/00013",
+      "category": "still_wrong",
+      "class_id": "7",
+      "before": "38",
+      "after": "3",
+      "official_class_id": 7,
+      "official_roi": [
+        5,
+        6,
+        31,
+        32
+      ],
+      "padded_crop_box": [
+        3,
+        4,
+        34,
+        35
+      ],
+      "source_image_sha256": "f616b078313431a0e4cd9e364903d1118119cc89c0796ca463f818e585d6f948",
+      "clean_float32_sha256": "cff30a227f8838c41a997d35543f7356ff977d3ac513e8585d97cd94953603ba",
+      "dark_float32_sha256": "7f48bbe81de7a65111e5b156d80f81a8d2d4fec7890b851f34cafc05e841f62e",
+      "enhanced_float32_sha256": "7c365f3c3438d068dc93ac9d3e428df45ee3383f69d485de39d7ced4fb51c9c3",
+      "before_archived_prediction": 38,
+      "before_archived_true_probability": 0.0005983295268379152,
+      "after_archived_prediction": 3,
+      "after_archived_true_probability": 0.0013492207508534193,
+      "before_local_prediction": 38,
+      "before_local_true_probability": 0.000598324928432703,
+      "before_true_probability_absolute_delta": 4.598405212163925e-09,
+      "after_local_prediction": 3,
+      "after_local_true_probability": 0.0013492266880348325,
+      "after_true_probability_absolute_delta": 5.9371814131736755e-09
+    }
+  ]
+}

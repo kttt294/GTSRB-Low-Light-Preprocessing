@@ -5,6 +5,28 @@
   "derived_tables": "report/evidence/final/",
   "selected_method": "pre__gaussian__gamma",
   "illustrative_images": "degradation, classical_default, parameters, enhancers_selected: historical image-processing illustrations only, never current classifier evidence",
-  "builder_sha256": "657eea06a0c61608d378330c0961037a5292d4f6606e9eaceee849fe5637d13d",
-  "real_lowlight_evaluated": false
+  "builder_sha256": "53d40967ab41fe056571a76aff6bdab2fb834ed30b9400d7f98e352736837451",
+  "real_lowlight_evaluated": false,
+  "visual_cases": {
+    "audit": "report/evidence/final/visual_cases_audit.json",
+    "status": "official_labels_and_all_12_predictions_verified",
+    "examples": 6,
+    "figure_sha256": "2b72586dcee81ce71fc5332a6940fc8fc4147b366420c6fc0224d59ccfc8a86e",
+    "checkpoint_sha256": "1eb63e6c674f592c066eded4b02923c093019264a2be1db757f1015936ad7164"
+  },
+  "additional_analysis": {
+    "audit": "report/evidence/final/review_analysis_audit.json",
+    "status": "completed",
+    "paired_prediction_rows": 682020,
+    "bootstrap": {
+      "repetitions": 2000,
+      "seed": 20261025,
+      "method": "paired class-stratified image percentile bootstrap and paired hierarchical checkpoint/image bootstrap",
+      "resampling_unit": "official test source image; same multiplicity for both methods and every fixed checkpoint/noise pair",
+      "aggregation": "Macro-F1 per run, mean noise within checkpoint, then mean checkpoints",
+      "interval": "marginal 95% percentile; three conditions, no multiplicity correction",
+      "checkpoint_resampling": "Resample three training-seed clusters with replacement; preserve the three noise runs within each chosen checkpoint; same image multiplicities across all clusters and both methods",
+      "limitations": "Only three training clusters, three fixed noises; image independence assumed, no verified official test tracks; not a population CI for real cameras"
+    }
+  }
 }

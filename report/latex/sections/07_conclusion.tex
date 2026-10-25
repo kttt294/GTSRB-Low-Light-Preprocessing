@@ -5,7 +5,7 @@ Trong nhóm tăng sáng, diffusion được chọn theo quy tắc validation. Kh
 
 PSNR/SSIM không thay thế đánh giá nhận dạng: Gaussian đơn lẻ mức nặng có cả PSNR/SSIM thấp hơn diffusion nhưng F1 cao hơn. Ablation cho thấy MSR từ 98,36\% với Gamma-only còn 57,84\% khi có cả hai nhiễu. Tăng sáng hoặc cải thiện một metric ảnh chưa đủ chứng minh giữ được chi tiết phân biệt lớp.
 
-Thứ tự tác động phụ thuộc bộ lọc, phép tăng sáng và cấu hình. Cặp Gaussian--CLAHE trên full-test có chênh lệch trung bình nhỏ theo hướng CLAHE rồi Gaussian; một số lượt có chiều ngược lại. Không có bằng chứng cho một thứ tự tốt nhất với mọi phương pháp. Ở mức vừa, chuỗi được chọn sửa đúng trung bình 1472,67 ảnh nhưng làm sai 29,22 ảnh mỗi lượt; cần xét cả lợi ích và lỗi phát sinh.
+Thứ tự tác động phụ thuộc bộ lọc, phép tăng sáng và cấu hình. Cặp Gaussian--CLAHE trên full-test có chênh lệch trung bình nhỏ theo hướng CLAHE rồi Gaussian; một số lượt có chiều ngược lại. Khoảng bootstrap 95\% chỉ ảnh là dương, nhưng khi lấy mẫu cả checkpoint đều chứa 0, nên chưa đủ cơ sở khẳng định ưu thế ổn định khi huấn luyện lại. Không có bằng chứng cho một thứ tự tốt nhất với mọi phương pháp. Ở mức vừa, chuỗi được chọn sửa đúng trung bình 1472,67 ảnh nhưng làm sai 29,22 ảnh mỗi lượt; cần xét cả lợi ích và lỗi phát sinh.
 
 Kết quả hỗ trợ lựa chọn tiền xử lý theo tác vụ nhận dạng và kiểm soát dữ liệu. Đóng góp nhóm là triển khai, kiểm chứng và so sánh có kiểm soát, chưa đề xuất thuật toán mới. Kết luận giới hạn ở ROI GTSRB với suy giảm mô phỏng, một kiến trúc CNN và lưới tham số hữu hạn; chưa chứng minh hiệu quả trên camera đêm thực, video hoặc hệ thống cảnh báo trong xe.
 \begin{center}\vspace{6mm}---------- HẾT ----------\end{center}

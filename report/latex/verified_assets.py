@@ -192,6 +192,26 @@ def main():
         'derived_tables':'report/evidence/final/','selected_method':facts['chosen_method'],
         'illustrative_images':'degradation, classical_default, parameters, enhancers_selected: historical image-processing illustrations only, never current classifier evidence',
         'builder_sha256':digest(__file__),'real_lowlight_evaluated':False}
+    visual_audit=data/'visual_cases_audit.json'
+    if visual_audit.exists():
+        visual=json.loads(visual_audit.read_text(encoding='utf-8'))
+        if (visual['result_archive_sha256']!=audit['archive_sha256']
+                or visual['figure_sha256']!=digest(fig/'visual_error_cases.png')
+                or visual['script_sha256']!=digest(out/'visual_cases.py')):
+            raise ValueError('Visual examples have changed; rerun visual_cases.py with the audited archive')
+        provenance['visual_cases']={'audit':'report/evidence/final/visual_cases_audit.json',
+            'status':visual['status'],'examples':len(visual['cases']),
+            'figure_sha256':visual['figure_sha256'],'checkpoint_sha256':visual['checkpoint_sha256']}
+    review_audit=data/'review_analysis_audit.json'
+    if review_audit.exists():
+        review=json.loads(review_audit.read_text(encoding='utf-8'))
+        if (review['result_archive_sha256']!=audit['archive_sha256']
+                or review['script_sha256']!=digest(out/'review_analysis.py')
+                or any(digest(ROOT/name)!=expected for name,expected in review['files'].items())):
+            raise ValueError('Additional report analyses have changed; rerun review_analysis.py')
+        provenance['additional_analysis']={'audit':'report/evidence/final/review_analysis_audit.json',
+            'status':review['status'],'paired_prediction_rows':review['prediction_rows_paired'],
+            'bootstrap':review['bootstrap']}
     (ROOT/'report/evidence/provenance.json').write_text(json.dumps(provenance,ensure_ascii=False,indent=2),encoding='utf-8')
     print('Built verified report assets:',facts['chosen_method'],'| source',audit['archive_sha256'])
 
