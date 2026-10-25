@@ -1,0 +1,29 @@
+{
+  "schema": "slide-editorial-review-v1",
+  "pages": 33,
+  "sha256": "c330df98790421a2ded4e41a2d40ea9eac4813b259caad6b464e975cd5e3aeb8",
+  "source_sha256": "c28338bb3f0d0114e53c03876ddab19e6a798663b03ddcb80b3d0947ddeabbe7",
+  "speaker_notes": 33,
+  "all_pages_visually_reviewed": true,
+  "detail_pages_reviewed": [
+    5,
+    18,
+    20,
+    28,
+    29,
+    31,
+    32
+  ],
+  "demo_page": 32,
+  "demo_links_verified": [
+    1,
+    32,
+    33
+  ],
+  "research_numbers_unchanged": true,
+  "latex_overflow_or_missing_reference_errors": [],
+  "mechanisms_tables_reviewed": [
+    7,
+    8
+  ]
+}

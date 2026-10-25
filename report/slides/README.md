@@ -4,11 +4,11 @@ Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Lo
 
 Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu, slide website demo và slide kết thúc.
 
-28 slide tiếng Việt, tỉ lệ 16:9, phù hợp khoảng 18–20 phút. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề và header bảng màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
+33 slide tiếng Việt, tỉ lệ 16:9, khoảng 20–25 phút tùy thời lượng giải thích phương pháp. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
 
 - `main.tex`: mã nguồn LaTeX, có ghi chú `\note{...}` cho từng slide.
 - `../thuyet_trinh.pdf`: bản trình chiếu cuối.
-- `loi_dan.md`: lời dẫn và gợi ý thời lượng để tập thuyết trình.
+- `../loi_dan.md`: lời dẫn cá nhân lưu local; ghi chú theo từng trang nằm trong `main.tex`.
 - `images/`: hình thực nghiệm lấy từ notebook đã chạy, logo từ paper mẫu.
 - `data/`: số liệu nguồn dùng đối chiếu các bảng và biểu đồ.
 - `build.ps1`: biên dịch hai lần bằng XeLaTeX và xuất PDF.
@@ -29,7 +29,7 @@ xelatex --disable-installer -interaction=nonstopmode -halt-on-error -output-dire
 Copy-Item -LiteralPath _build/main.pdf -Destination ../thuyet_trinh.pdf
 ```
 
-Máy hiện có MiKTeX, Beamer, PGFPlots và Arial. Không cài thêm dependency. Chép toàn bộ thư mục này để giữ hình và dữ liệu. Với Overleaf chọn XeLaTeX; nếu không có Arial, đổi `Arial` thành `TeX Gyre Heros` trong hai lệnh đặt font.
+Máy hiện có MiKTeX, Beamer, PGFPlots và Arial. Không cài thêm dependency. Giữ cả `report/slides` và `report/latex/images/demo` để không thiếu ảnh chụp website. Với Overleaf chọn XeLaTeX; nếu không có Arial, đổi `Arial` thành `TeX Gyre Heros` trong hai lệnh đặt font.
 
 ## Nội dung và nguồn
 
@@ -37,3 +37,7 @@ Các kết quả được đối chiếu với báo cáo hiện tại và bằng
 
 Thanh footer chỉ hiển thị paper liên quan theo tác giả, hội nghị/tạp chí và năm; có thể bấm để mở bài báo. Slide không có paper để trống ô giữa. Thông tin truy vết notebook/code được giữ trong `\note`, không xuất hiện trong PDF trình chiếu. Báo cáo đầy đủ và dẫn nguồn học thuật nằm ở `../bao_cao.pdf`.
 
+
+## Cách đọc slide
+
+Mỗi trang nêu rõ cơ chế, cách áp dụng trong dự án và ý nghĩa hoặc giới hạn. Các mục dữ liệu giải thích ROI, lề 5%, track và cách ly; hai trang mô phỏng phân biệt từng bước với ba mức suy giảm. Phần đánh giá nêu kết quả ảnh gốc, giới hạn của mô hình cố định và cách hiểu PSNR/SSIM so với Accuracy/Macro-F1. Ảnh demo nằm ở trang 32, kèm liên kết trực tiếp.

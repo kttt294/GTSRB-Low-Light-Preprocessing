@@ -1,0 +1,20 @@
+{
+  "ref": "/code/kieuthithutrang/gtsrb-low-light-enhancement-for-traffic-signs",
+  "url": "https://www.kaggle.com/code/kieuthithutrang/gtsrb-low-light-enhancement-for-traffic-signs",
+  "version_number": 4,
+  "error": "",
+  "invalid_dataset_sources": [],
+  "invalid_kernel_sources": [],
+  "saved_at_utc": "2026-10-25T12:42:21.445488+00:00",
+  "execution": "quick_save_no_run",
+  "source_commit": "f3169402c1e2cdf584467b220881156535d44240",
+  "local_sha256": "e8c2565606b2c15becd2ee2712d819b51a45f179bb4084fd18913bebea318fc1",
+  "remote_cells_match_local": true,
+  "verified_source_files": 22,
+  "experiment_cells_unchanged": true,
+  "github_checkout_smoke_test_passed": true,
+  "notebook_schema_valid": true,
+  "all_code_cells_compile": true,
+  "research_rerun": false,
+  "source_cell_lines": 26
+}

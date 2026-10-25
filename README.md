@@ -55,6 +55,8 @@ Số liệu, tương quan và biên bản kiểm tra ở [evidence/final](report
 
 ## Phân tích và tái lập
 
+Notebook lấy 22 file mã/cấu hình từ GitHub tại commit cố định `f3169402c1e2cdf584467b220881156535d44240` và ghi SHA-256 vào gói kết quả để truy vết; không nhúng toàn bộ `src/` vào cell. Cần bật Internet và GPU trên Kaggle. Khi chủ động đổi phiên bản mã thực nghiệm, cập nhật commit và tạo lại notebook bằng công cụ bên dưới; sửa `src/` local không tự thay mã đã khóa. Mặc định `reuse` dùng lại baseline đã kiểm chứng; chọn `fresh` để huấn luyện lại toàn bộ.
+
 Từ thư mục gốc, có thể sinh lại notebook, xem lệnh thí nghiệm hoặc phân tích kết quả đã giải nén:
 
 ```powershell

@@ -51,8 +51,8 @@
   "direct_zip_public_download_verified": true,
   "direct_zip_download_verified_on_kaggle": true,
   "baseline_reuse_verified_on_kaggle": true,
-  "slides_pages": 28,
-  "slides_sha256": "6f71eef7cac2aebfe39911a71111e749ac124f77d9ac74248e16e0e36aa9c491",
+  "slides_pages": 33,
+  "slides_sha256": "c330df98790421a2ded4e41a2d40ea9eac4813b259caad6b464e975cd5e3aeb8",
   "all_scope_raw_prediction_rows_recomputed": 5847990,
   "report_current_evidence": "report/evidence/final/",
   "report_chosen_pipeline": "Gaussian 5x5 sigma0.8 then Gamma0.8",
@@ -62,7 +62,7 @@
   "kaggle_embedded_source_config_files": 22,
   "presentation_clahe_clip_limit": 1,
   "speaker_notes_local_only": true,
-  "speaker_notes_slides": 28,
+  "speaker_notes_slides": 33,
   "repository": "https://github.com/kttt294/GTSRB-Low-Light-Preprocessing",
   "report_repository_link_verified": true,
   "visual_error_examples": 6,
@@ -84,5 +84,6 @@
     41
   ],
   "demo_screenshot_visual_review": "Four original screenshots checked; two figures per page, captions and website link verified.",
-  "slides_demo_screenshot_page": 27
+  "slides_demo_screenshot_page": 32,
+  "slides_degradation_layout_verified": true
 }

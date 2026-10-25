@@ -1,14 +1,22 @@
-"""Build a standalone public Kaggle notebook from an explicit source-file allowlist."""
+"""Build the public notebook with a pinned, hash-verified GitHub source checkout."""
 import json
 from pathlib import Path
 import textwrap
+import hashlib
+import subprocess
 
 ROOT=Path(__file__).resolve().parents[2]
 FILES=sorted((ROOT/'src').glob('*.py'))+[ROOT/'src/tools'/name for name in
     ['__init__.py','public_sources.py','fresh_run.py','research_evidence.py','result_archive.py',
      'checkpoint_restore.py','processing_pipeline.py','processing_study.py','baseline_input.py']]
 FILES += [ROOT/'configs/resnet18.json',ROOT/'configs/public_sources.json',ROOT/'configs/processing_extension.json']
-sources={p.relative_to(ROOT).as_posix():p.read_text(encoding='utf-8') for p in FILES}
+SOURCE_REPOSITORY = 'https://github.com/kttt294/GTSRB-Low-Light-Preprocessing.git'
+SOURCE_COMMIT = 'f3169402c1e2cdf584467b220881156535d44240'
+# Read the pinned revision, rather than silently packaging later working-tree edits.
+sources = {p.relative_to(ROOT).as_posix(): subprocess.check_output(
+    ['git', 'show', SOURCE_COMMIT + ':' + p.relative_to(ROOT).as_posix()], cwd=ROOT
+).decode('utf-8').replace('\r\n', '\n') for p in FILES}
+source_hashes = {name: hashlib.sha256(value.encode('utf-8')).hexdigest() for name, value in sources.items()}
 cells=[]
 
 
@@ -32,11 +40,11 @@ Không cần dataset private, file API, checkpoint GTSRB cũ hay Google Drive c�
 Đây là **lần chạy mới**, không phải kết quả cũ được sao chép. Chỉ gọi là hoàn tất khi RUN_STATUS.json ghi completed và gói kết quả đã qua kiểm tra dự đoán. Ảnh thiếu sáng là mô phỏng; không tuyên bố đã đánh giá camera đêm thực.
 ''')
 add('markdown','''
-## 1. Mã nguồn đi kèm
+## 1. Lấy mã nguồn từ GitHub
 
-Đây là notebook chính duy nhất: toàn bộ bước chuẩn bị dữ liệu, train/khôi phục, chọn tham số, đánh giá và đóng gói đều nằm trong file này. Cell mã nguồn tự tạo các module Python và cấu hình trong thư mục tạm; không cần tải riêng src/configs hoặc chạy notebook khác. GTSRB, trọng số tác giả và ZIP kết quả dùng lại được tải theo giao thức đã ghi.
+Notebook tải mã từ [GitHub](https://github.com/kttt294/GTSRB-Low-Light-Preprocessing) tại một commit cố định, checkout đúng phiên bản rồi import các module; hash của 22 file Python/cấu hình được ghi vào kết quả để truy vết. Không lấy nhánh main mới nhất, không nhúng toàn bộ mã vào cell. Mở `src/` trên GitHub để đọc phần triển khai.
 
-Cell bên dưới chứa bản chụp mã nguồn của chính dự án, đọc được và có hash từng file. Không cần clone một nhánh GitHub chưa được công bố. Mã, ảnh đầu vào và trọng số tác giả được lưu trong `/tmp/gtsrb-clean`, tách khỏi Output công khai. Chỉ các kết quả và checkpoint huấn luyện mới được xuất ra `/kaggle/working`.
+Một notebook tổ chức toàn bộ quy trình chuẩn bị dữ liệu, train/khôi phục, chọn tham số, đánh giá và đóng gói. Cần Internet để lấy mã, GTSRB, weights tác giả và ZIP kết quả dùng lại. Các đầu vào nằm trong `/tmp/gtsrb-clean`; chỉ kết quả và checkpoint được xuất vào `/kaggle/working`. Không cần API key trong notebook.
 ''')
 add('code','''
 import os, sys, json, hashlib, subprocess, shutil
@@ -47,18 +55,27 @@ PUBLIC = Path('/kaggle/working')
 ROOT.mkdir(parents=True,exist_ok=True)
 PUBLIC.mkdir(parents=True,exist_ok=True)
 ''')
-payload='PROJECT_FILES = '+json.dumps(sources,ensure_ascii=False,indent=2)+'''
-for relative, content in PROJECT_FILES.items():
-    path = ROOT / relative
-    assert path.resolve().is_relative_to(ROOT.resolve())
-    path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(content,encoding='utf-8')
+payload = 'SOURCE_REPOSITORY = ' + repr(SOURCE_REPOSITORY) + '\n'
+payload += 'SOURCE_COMMIT = ' + repr(SOURCE_COMMIT) + '\n'
+payload += 'SOURCE_FILES = (\n' + '\n'.join('    ' + repr(line + ' ') for line in textwrap.wrap(' '.join(sources), width=100)) + '\n).split()\n'
+payload += r"""
+REPOSITORY = ROOT / 'repository'
+if not REPOSITORY.exists():
+    subprocess.run(['git', 'clone', '--no-checkout', SOURCE_REPOSITORY, str(REPOSITORY)], check=True)
+subprocess.run(['git', '-C', str(REPOSITORY), 'checkout', '--detach', SOURCE_COMMIT], check=True)
+SOURCE_HASHES = {}
+for name in SOURCE_FILES:
+    # Read Git's committed content, independent of local line-ending settings.
+    content = subprocess.check_output(['git', '-C', str(REPOSITORY), 'show', SOURCE_COMMIT + ':' + name])
+    target = ROOT / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(content)
+    SOURCE_HASHES[name] = hashlib.sha256(content).hexdigest()
 os.chdir(ROOT)
-sys.path.insert(0,str(ROOT))
-SOURCE_HASHES = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in PROJECT_FILES}
-print('Source snapshot:',len(SOURCE_HASHES),'files; no API credentials required.')
-'''
-add('code',payload,hidden=True)
+sys.path.insert(0, str(ROOT))
+print('Source commit:', SOURCE_COMMIT)
+"""
+add('code', payload)
 add('markdown','''
 ## 2. Môi trường và cấu hình
 
@@ -244,7 +261,7 @@ extend(cells,add)
 notebook={'cells':cells,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},
           'language_info':{'name':'python'},'gtsrb':{'default_train_mode':'reuse','private_inputs':False,
           'extension_run_ready':True,'baseline_input':'direct_public_notebook_output_zip',
-          'source_files':len(sources)}},
+          'source_files':len(sources), 'source_repository':SOURCE_REPOSITORY, 'source_commit':SOURCE_COMMIT}},
           'nbformat':4,'nbformat_minor':5}
 path=ROOT/'notebooks/gtsrb-low-light-enhancement-for-traffic-signs.ipynb'
 path.write_text(json.dumps(notebook,ensure_ascii=False,indent=1)+'\n',encoding='utf-8')
