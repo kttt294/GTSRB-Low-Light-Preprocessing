@@ -1,7 +1,7 @@
 {
-  "branch": "prod",
+  "branch": "main",
   "pdf_pages": 37,
-  "pdf_sha256": "4582d4f4b4a2e339d86336b43a7f83dd81c513e09145218e95c0bded3f91b1b9",
+  "pdf_sha256": "49879ef95e0c457f81f05d0fd5e246703dccb3a467227dad030347ae1cd03f22",
   "latex_reference_or_overflow_errors": [],
   "unit_tests_passed": 31,
   "notebook_schema_valid": true,
@@ -62,5 +62,7 @@
   "kaggle_embedded_source_config_files": 22,
   "presentation_clahe_clip_limit": 1,
   "speaker_notes_local_only": true,
-  "speaker_notes_slides": 27
+  "speaker_notes_slides": 27,
+  "repository": "https://github.com/kttt294/gtsrb-low-light-preprocessing",
+  "report_repository_link_verified": true
 }
