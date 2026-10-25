@@ -1,8 +1,8 @@
 {
   "schema": "slide-editorial-review-v1",
   "pages": 33,
-  "sha256": "c330df98790421a2ded4e41a2d40ea9eac4813b259caad6b464e975cd5e3aeb8",
-  "source_sha256": "c28338bb3f0d0114e53c03876ddab19e6a798663b03ddcb80b3d0947ddeabbe7",
+  "sha256": "1bb993cadb59d6941bc27a9d28eb3a8b696fe599f84496f4cccf7bd5659a73dc",
+  "source_sha256": "80dbe3e091c7f5694d4a6ce2e40976b2ff774dfc958f3f4aba3b4c099d485315",
   "speaker_notes": 33,
   "all_pages_visually_reviewed": true,
   "detail_pages_reviewed": [
@@ -17,13 +17,18 @@
   "demo_page": 32,
   "demo_links_verified": [
     1,
-    32,
-    33
+    32
   ],
   "research_numbers_unchanged": true,
   "latex_overflow_or_missing_reference_errors": [],
   "mechanisms_tables_reviewed": [
     7,
     8
-  ]
+  ],
+  "ranked_tables_pages": [
+    22,
+    24,
+    25
+  ],
+  "ranking_rule": "Bold highest mean; underline second highest mean within each column. Dispersion is not ranked."
 }

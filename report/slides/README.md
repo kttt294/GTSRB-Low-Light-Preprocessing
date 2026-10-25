@@ -2,7 +2,7 @@
 
 Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Low-Light-Preprocessing).
 
-Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu, slide website demo và slide kết thúc.
+Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu và slide website demo.
 
 33 slide tiếng Việt, tỉ lệ 16:9, khoảng 20–25 phút tùy thời lượng giải thích phương pháp. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
 
