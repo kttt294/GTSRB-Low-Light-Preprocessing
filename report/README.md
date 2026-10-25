@@ -5,6 +5,7 @@ Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Lo
 Đề tài: **Khảo sát ảnh hưởng của xử lý ảnh đến hiệu năng nhận dạng biển báo giao thông trong điều kiện thiếu sáng.**
 
 - [Báo cáo PDF](bao_cao.pdf) · [Slide PDF](thuyet_trinh.pdf).
+- [Demo trực tuyến](https://image-preprocessing.techvi.io.vn).
 - [Notebook Kaggle](https://www.kaggle.com/code/kieuthithutrang/gtsrb-low-light-enhancement-for-traffic-signs): phiên 2 đã hoàn tất toàn bộ khảo sát kết hợp.
 - `latex/sections/`: nội dung; `latex/tables/` và `latex/images/`: bảng/hình; `slides/main.tex`: nguồn slide.
 - `evidence/final/`: bằng chứng hiện tại; `provenance.json`: nguồn và giới hạn kiểm chứng. Các CSV lịch sử ngoài `final/` không được dùng để sinh bảng hiện tại.

@@ -77,7 +77,9 @@ Truyền đường dẫn đó qua `--manifest`, đặt `--image-root` là thư m
 
 ## Demo web
 
-Demo tĩnh nằm trong [demo/](demo/README.md), dùng HTML/CSS/JavaScript. Chọn 30 mẫu thuộc 30 lớp và bốn trạng thái để so sánh trước–sau Gaussian → Gamma. 120 trường hợp và 240 dự đoán được tính sẵn bằng cùng checkpoint ResNet-18; website không nhận ảnh tải lên hoặc chạy mô hình trực tiếp.
+**[Mở demo trực tuyến](https://image-preprocessing.techvi.io.vn)**.
+
+Demo tĩnh nằm trong [demo/](demo/README.md), dùng HTML/CSS/JavaScript. Chọn 46 mẫu minh họa đủ 43 lớp và bốn trạng thái để so sánh trước–sau Gaussian → Gamma. 184 trường hợp và 368 dự đoán được tính sẵn bằng cùng checkpoint ResNet-18; website không nhận ảnh tải lên hoặc chạy mô hình trực tiếp. Ảnh đầu tiên 00496 minh họa trường hợp ảnh gốc bị đoán sai nhưng sau xử lý được đoán đúng; đây là ví dụ có chọn theo kết quả, không thay thế đánh giá toàn tập test.
 
 ```powershell
 python -m demo

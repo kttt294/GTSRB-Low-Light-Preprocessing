@@ -14,12 +14,12 @@ class StaticBundleTests(unittest.TestCase):
         cls.data = json.loads((PUBLIC / 'data/samples.json').read_text(encoding='utf-8'))
         cls.audit = json.loads((PUBLIC / 'data/provenance.json').read_text(encoding='utf-8'))
 
-    def test_complete_thirty_class_four_condition_matrix(self):
+    def test_complete_forty_six_sample_four_condition_matrix(self):
         self.assertEqual(self.data['mode'], 'precomputed')
         samples = self.data['samples']
-        self.assertEqual(len(samples), 30)
-        self.assertEqual(len({s['id'] for s in samples}), 30)
-        self.assertEqual(len({s['class_id'] for s in samples}), 30)
+        self.assertEqual(len(samples), 46)
+        self.assertEqual(len({s['id'] for s in samples}), 46)
+        self.assertEqual({s['class_id'] for s in samples}, set(range(43)))
         for sample in samples:
             self.assertEqual(set(sample['results']), {'original', 'mild', 'medium', 'severe'})
 
@@ -37,11 +37,11 @@ class StaticBundleTests(unittest.TestCase):
                     self.assertEqual(prediction['correct'], prediction['class_id'] == sample['class_id'])
 
     def test_all_assets_match_hashes_and_stay_inside_public(self):
-        self.assertEqual(self.audit['medium_predictions_matched_archive'], 60)
-        self.assertEqual(self.audit['case_count'], 120)
-        self.assertEqual(self.audit['prediction_count'], 240)
-        self.assertEqual(self.audit['image_count'], 240)
-        self.assertEqual(len(self.audit['files']), 241)
+        self.assertEqual(self.audit['medium_predictions_matched_archive'], 92)
+        self.assertEqual(self.audit['case_count'], 184)
+        self.assertEqual(self.audit['prediction_count'], 368)
+        self.assertEqual(self.audit['image_count'], 368)
+        self.assertEqual(len(self.audit['files']), 370)
         for name, expected in self.audit['files'].items():
             path = (PUBLIC / name).resolve()
             self.assertTrue(path.is_relative_to(PUBLIC.resolve()))
@@ -58,7 +58,17 @@ class StaticBundleTests(unittest.TestCase):
                     self.assertEqual(struct.unpack('>II', pixels[16:24]), (64, 64))
                     self.assertEqual(pixels[25], 2)
                     images.add(name)
-        self.assertEqual(len(images), 240)
+        self.assertEqual(len(images), 368)
+
+    def test_first_sample_demonstrates_a_real_clean_correction(self):
+        sample = self.data['samples'][0]
+        self.assertEqual(sample['id'], '00496')
+        result = sample['results']['original']
+        self.assertFalse(result['before']['correct'])
+        self.assertTrue(result['after']['correct'])
+        self.assertEqual(result['before']['class_id'], 11)
+        self.assertEqual(result['after']['class_id'], 30)
+        self.assertEqual(result['truth']['class_id'], 30)
 
     def test_site_has_no_uploads_or_server_api(self):
         html = (PUBLIC / 'index.html').read_text(encoding='utf-8')
@@ -68,10 +78,19 @@ class StaticBundleTests(unittest.TestCase):
             self.assertNotIn('FormData', text)
             self.assertNotIn('image-file', text)
             self.assertNotIn('open-image', text)
-        self.assertIn('class="demo-note">Demo</span>', html)
-        self.assertIn("fetch('data/samples.json')", script)
+        self.assertNotIn('demo-note', html)
+        self.assertNotIn('fetch(', script)
+        self.assertIn('window.GTSRB_DEMO', script)
         self.assertFalse(any(PUBLIC.rglob('*.pt')))
         self.assertFalse(any(PUBLIC.rglob('*.py')))
+
+    def test_direct_file_catalogue_matches_the_json_and_loads_first(self):
+        script = (PUBLIC / 'data/samples.js').read_text(encoding='utf-8')
+        self.assertTrue(script.startswith('window.GTSRB_DEMO = '))
+        data = json.loads(script.removeprefix('window.GTSRB_DEMO = ').strip().removesuffix(';'))
+        self.assertEqual(data, self.data)
+        html = (PUBLIC / 'index.html').read_text(encoding='utf-8')
+        self.assertLess(html.index('data/samples.js'), html.index('src="app.js"'))
 
     def test_original_six_cases_still_match_report(self):
         report = json.loads((PUBLIC.parent.parent / 'report/evidence/final/visual_cases_audit.json').read_text(encoding='utf-8'))

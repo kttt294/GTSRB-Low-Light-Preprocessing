@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const state = { sample: '00020', condition: 'medium', samples: new Map() };
+  const state = { sample: null, condition: 'original', samples: new Map() };
   let selection = 0;
 
   function error(message) {
@@ -24,6 +24,7 @@
     box.classList.toggle('correct', value.correct);
     box.classList.toggle('incorrect', !value.correct);
     box.querySelector('.verdict').textContent = value.correct ? '✓' : '×';
+    box.querySelector('.verdict').setAttribute('aria-label', value.correct ? 'Dự đoán đúng' : 'Dự đoán sai');
     $(which + '-label').textContent = value.label;
   }
 
@@ -69,10 +70,8 @@
 
   async function start() {
     try {
-      const response = await fetch('data/samples.json');
-      if (!response.ok) throw new Error('Không tải được bộ kết quả demo.');
-      const data = await response.json();
-      if (data.schema_version !== 1 || data.mode !== 'precomputed' || data.samples.length !== 30) throw new Error('Bộ kết quả demo không hợp lệ.');
+      const data = window.GTSRB_DEMO;
+      if (!data || data.schema_version !== 1 || data.mode !== 'precomputed' || !data.samples.length) throw new Error('Không tải được bộ kết quả demo. Hãy giữ nguyên thư mục data cạnh index.html.');
       for (const sample of data.samples) {
         state.samples.set(sample.id, sample);
         const button = document.createElement('button');
@@ -81,7 +80,7 @@
         button.setAttribute('aria-pressed', 'false'); button.title = sample.label + ' · ' + sample.name;
         const image = document.createElement('img'); image.src = sample.thumbnail; image.alt = '';
         button.append(image);
-        button.addEventListener('click', () => { state.sample = sample.id; setCondition('medium'); showResult(); });
+        button.addEventListener('click', () => { state.sample = sample.id; setCondition('original'); showResult(); });
         $('samples').append(button);
       }
       if (!state.samples.has(state.sample)) state.sample = data.samples[0].id;

@@ -1,4 +1,4 @@
-"""Prepare the frozen classifier and 30 official ROI examples; no training."""
+"""Prepare the frozen classifier and 46 official ROI examples; no training."""
 import csv
 import argparse
 import hashlib
@@ -55,6 +55,36 @@ def prepare(archive, data_root, cache=CACHE):
                               class_id=class_id, padded_crop_box=box))
         if len(cases) != 30 or len({int(case['class_id']) for case in cases}) != 30:
             raise ValueError('Expected 30 distinct samples and classes')
+        featured = json.loads((HERE / 'featured_example.json').read_text(encoding='utf-8'))
+        featured_name = featured['sample_id'].rsplit('/', 1)[-1] + '.ppm'
+        official = next(row for row in annotations if row['Filename'] == featured_name)
+        official_box = crop_box([official[key] for key in ['Roi.X1', 'Roi.Y1', 'Roi.X2', 'Roi.Y2']],
+                                int(official['Width']), int(official['Height']),
+                                padding=protocol['config']['crop']['padding'],
+                                inclusive=protocol['config']['crop']['roi_end_inclusive'])
+        if (featured['sample_id'] not in allowed_ids or int(official['ClassId']) != featured['class_id']
+                or list(official_box) != featured['padded_crop_box'] or featured['checkpoint_sha256'] != CHECKPOINT_SHA256):
+            raise ValueError('Featured sample does not match official label, crop or checkpoint')
+        cases.insert(0, featured)
+        if len({case['sample_id'] for case in cases}) != 31:
+            raise ValueError('Featured sample duplicates an existing example')
+        represented = {int(case['class_id']) for case in cases}
+        extra_classes = sorted(set(range(43)) - represented) + [0, 21, 42]
+        if len(extra_classes) != 15:
+            raise ValueError('Expected 12 missing classes and three additional examples')
+        for class_id in extra_classes:
+            used = {case['sample_id'] for case in cases}
+            row = next(row for row in annotations if int(row['ClassId']) == class_id
+                       and 'gtsrb/test/' + Path(row['Filename']).stem in allowed_ids
+                       and 'gtsrb/test/' + Path(row['Filename']).stem not in used)
+            box = crop_box([row[key] for key in ['Roi.X1', 'Roi.Y1', 'Roi.X2', 'Roi.Y2']],
+                           int(row['Width']), int(row['Height']),
+                           padding=protocol['config']['crop']['padding'],
+                           inclusive=protocol['config']['crop']['roi_end_inclusive'])
+            cases.append(dict(sample_id='gtsrb/test/' + Path(row['Filename']).stem,
+                              class_id=class_id, padded_crop_box=box))
+        if len(cases) != 46 or len({case['sample_id'] for case in cases}) != 46:
+            raise ValueError('Expected 46 unique examples')
         predictions = {}
         wanted = {case['sample_id'] for case in cases}
         with results.open('08_processing_extension/fulltest/predictions.csv') as binary:
@@ -66,9 +96,9 @@ def prepare(archive, data_root, cache=CACHE):
                     if key in predictions:
                         raise ValueError('Duplicate archived prediction')
                     predictions[key] = row
-                    if len(predictions) == 60:
+                    if len(predictions) == 2 * len(cases):
                         break
-        if len(predictions) != 60:
+        if len(predictions) != 2 * len(cases):
             raise ValueError('Missing archived predictions for selected samples')
     arrays, samples = {}, []
     with zipfile.ZipFile(data_root / 'GTSRB_Final_Test_Images.zip') as raw:
@@ -92,19 +122,22 @@ def prepare(archive, data_root, cache=CACHE):
             if int(before['class_id']) != int(case['class_id']) or int(after['class_id']) != int(case['class_id']):
                 raise ValueError('Official label differs from prediction record')
             arrays[key] = clean
-            samples.append(dict(id=key, sample_id=sample_id, filename=filename,
+            sample = dict(id=key, sample_id=sample_id, filename=filename,
                                 class_id=int(case['class_id']),
                                 source_image_sha256=source_sha,
-                                expected_before=int(before['prediction']), expected_after=int(after['prediction'])))
+                                expected_before=int(before['prediction']), expected_after=int(after['prediction']))
+            if 'original_before' in case:
+                sample.update(expected_original_before=case['original_before'], expected_original_after=case['original_after'])
+            samples.append(sample)
     cache.mkdir(parents=True, exist_ok=True)
     (cache / 'cnn_11.pt').write_bytes(checkpoint)
     np.savez_compressed(cache / 'samples.npz', **arrays)
     manifest = dict(archive_sha256=ARCHIVE_SHA256, checkpoint_sha256=CHECKPOINT_SHA256,
                     samples_sha256=digest(cache / 'samples.npz'), pipeline=PIPELINE, conditions=CONDITIONS,
                     samples=samples, noise_seed=101, train_seed=11,
-                    selection='Six report examples plus first test ID from each of 24 evenly spaced unrepresented classes; no selection by predictions')
+                    selection='Featured clean correction, original 30 examples, then first unused ID for 12 missing classes and classes 0/21/42; covers all 43 classes; illustrative only')
     (cache / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print('Ready: frozen ResNet-18 seed 11 and 30 GTSRB samples from 30 classes.', flush=True)
+    print('Ready: frozen ResNet-18 seed 11 and 46 GTSRB samples covering 43 classes; 00496 first.', flush=True)
 
 
 def main():

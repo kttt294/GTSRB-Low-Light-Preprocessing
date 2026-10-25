@@ -1,0 +1,11 @@
+{
+  "sample_id": "gtsrb/test/00496",
+  "class_id": 30,
+  "padded_crop_box": [4, 4, 33, 33],
+  "source_image_sha256": "4f5e8dec0ff7c59bd0ffe87d4b1c7385a70d8943f406b4307d64c5a227b9c5c7",
+  "clean_float32_sha256": "d969f1023aa7153707fcd8f671ca66d6269a3b3a7b126923a0b33e0d9d8ac15d",
+  "original_before": 11,
+  "original_after": 30,
+  "checkpoint_sha256": "1eb63e6c674f592c066eded4b02923c093019264a2be1db757f1015936ad7164",
+  "selection": "First ascending official test ID among archived seed-11 clean errors corrected by the unchanged Gaussian-Gamma pipeline; seven candidates checked. Featured for illustration, not used to select research parameters."
+}

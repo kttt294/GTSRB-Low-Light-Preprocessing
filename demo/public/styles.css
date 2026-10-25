@@ -27,7 +27,6 @@ button, select { -webkit-tap-highlight-color: transparent; }
 .filename { display: flex; align-items: center; gap: 9px; min-width: 0; font-size: 12px; color: var(--muted); }
 .filename svg { width: 15px; height: 15px; flex-shrink: 0; }
 .filename span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.demo-note { padding-left: 8px; font-size: 11px; }
 .topline > .method { font-size: 12px; flex-shrink: 0; }
 .comparison { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
 .workspace { display: grid; grid-template-columns: 1.15fr 1fr; }
@@ -42,10 +41,11 @@ button, select { -webkit-tap-highlight-color: transparent; }
 .wipe-divider { position: absolute; top: 0; bottom: 60px; left: var(--split, 50%); width: 2px; background: var(--panel); pointer-events: none; }
 .wipe-divider::after { content: "↔"; position: absolute; top: calc(50% - 16px); left: -15px; width: 32px; height: 32px; background: var(--panel); color: var(--ink); border-radius: 50%; display: grid; place-items: center; font-size: 16px; box-shadow: 0 1px 7px #00000018; }
 .predictions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.prediction { padding: 22px 23px 25px; display: flex; align-items: center; gap: 11px; min-height: 90px; }
-.verdict { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 50%; background: var(--well); color: var(--muted); flex-shrink: 0; font-size: 17px; }
-.prediction.correct .verdict { background: var(--soft); color: var(--accent); }
-.prediction.incorrect .verdict { color: var(--incorrect); }
+.prediction { padding: 22px 23px 25px; min-height: 90px; }
+.prediction-value { display: flex; align-items: center; gap: 11px; }
+.verdict { display: grid; place-items: center; width: 23.8px; height: 23.8px; border-radius: 50%; background: var(--well); color: var(--muted); flex-shrink: 0; font-size: 16.8px; font-weight: 700; line-height: 1; }
+.prediction.correct .verdict { background: #14804a; color: #fff; }
+.prediction.incorrect .verdict { background: #c62828; color: #fff; }
 .prediction strong { display: block; font-size: clamp(16px, 2.7vw, 24px); font-weight: 600; line-height: 1.25; letter-spacing: -.5px; overflow-wrap: anywhere; }
 .prediction-caption { display: block; color: var(--muted); font-size: 11px; line-height: 1.4; min-height: 31px; margin-bottom: 6px; }
 .prediction small { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; }
@@ -78,16 +78,16 @@ button, select { -webkit-tap-highlight-color: transparent; }
   .image-stage > img, .wipe-overlay img { width: 150px; height: 150px; }
   .compare-stage { height: 320px; }
   .compare-stage > img, .wipe-overlay img { width: 210px; height: 210px; }
-  .prediction { padding: 18px 11px; gap: 8px; }
+  .prediction { padding: 18px 11px; }
+  .prediction-value { gap: 8px; }
   .predictions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ground-truth { grid-column: 1 / -1; padding-top: 0; }
   .ground-truth .prediction-caption { min-height: 0; }
   .prediction-caption { min-height: 62px; }
-  .verdict { width: 23px; height: 23px; font-size: 14px; }
+  .verdict { width: 19.6px; height: 19.6px; font-size: 14.7px; }
 }
 @media (max-width: 390px) {
   .filename { flex-wrap: wrap; }
-  .demo-note { flex-basis: 100%; padding-left: 24px; }
   .image-stage { height: 180px; }
   .compare-stage { height: 300px; }
   .prediction strong { font-size: 16px; }
