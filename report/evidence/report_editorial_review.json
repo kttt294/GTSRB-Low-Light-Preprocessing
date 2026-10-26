@@ -1,0 +1,75 @@
+{
+  "pdf_pages": 46,
+  "pdf_sha256": "bdd9e87f3da743f941b6048ca9914d945f3dc7e675c1001285542008236764d5",
+  "edited_sections": [
+    {
+      "file": "01_introduction.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "5ce59aa8a4d695d861014a339fa4cb4e056b3328d6e994b1ef11827199e0533d"
+    },
+    {
+      "file": "02_data.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "0b8b4f301b933d1eb194e52058fe5a29eecbce7d5d69c107b3a4429e13ae9efe"
+    },
+    {
+      "file": "03b_deep_mechanisms.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "58fc724f347814801904aaa9bbaf5873257aa7cf45aceb702b51c569fdaaf9db"
+    },
+    {
+      "file": "03_methods.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "4e17efd23b5ad3931a66fc910c74b0302c637d74439a9583c9a659f01de431c0"
+    },
+    {
+      "file": "04_experiments.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "dec1179f2a893c392308e59049199b456383e5e6a4232eb2dc061e023ae8552d"
+    },
+    {
+      "file": "05b_error_analysis.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "bfa6580fc05c6032704cee9b719b6bdd987c898cb4dd6c99ecf3393cfbadad1b"
+    },
+    {
+      "file": "05_discussion.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "43bc3d8dd0970099508b2baaaf0f77cdcc53558c3527080790d56c3870b52d55"
+    },
+    {
+      "file": "06b_reproducibility.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "6d9c8450e8074b5f411e9373cd05832389019b5073c99033f894c56e6aa94c1e"
+    },
+    {
+      "file": "06c_processing_extension.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "7058573962ad983bbaff45d655e121bb07ecbadda0d5224cc0268003c82bf069"
+    },
+    {
+      "file": "06_pipeline.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "0e60b87a92dee8565d7837b3802f8df62161693553a1d8561c53a30f442ebc36"
+    },
+    {
+      "file": "07_conclusion.tex",
+      "equations_and_table_sources_preserved": true,
+      "citations_and_labels_preserved": true,
+      "sha256": "bcfe3cfef4ed91a1d4a5fbe16db0e8ee68c794e9dec2731b54119714b86ead78"
+    }
+  ],
+  "visual_review": "All pages reviewed in contact sheets, with full-page inspection of the revised matrix layout. Equations, table sources and citations checked against the previous report.",
+  "latex_reference_or_overflow_errors": [],
+  "research_results_changed": false
+}

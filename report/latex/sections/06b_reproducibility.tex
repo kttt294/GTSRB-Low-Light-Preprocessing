@@ -4,9 +4,9 @@ Notebook công khai kèm mã và cấu hình:
 \begin{center}
 {\small\url{https://www.kaggle.com/code/kieuthithutrang/gtsrb-low-light-enhancement-for-traffic-signs}}
 \end{center}
-Dữ liệu tải từ archive GTSRB chính thức; mã và weights enhancer khóa theo nguồn tác giả, commit và SHA-256. Khi so sánh, giữ nguyên split, mã ảnh, mức suy giảm, noise seed và ba checkpoint. Tham số chọn trên validation trước test. Hướng dẫn nằm trong \path{README.md} và \path{configs/}.
+Nhóm tải dữ liệu từ archive GTSRB chính thức. Mã và trọng số pretrained của các mô hình tăng cường được ghi nguồn, commit và SHA-256 để xác định phiên bản. Trong các phép so sánh, nhóm giữ nguyên cách chia tập, mã ảnh, mức suy giảm, noise seed và ba checkpoint. Tham số xử lý được chọn trên validation trước khi chạy test. Người đọc có thể xem hướng dẫn chạy trong \path{README.md} và các cấu hình trong \path{configs/}.
 
 \subsubsection{Bằng chứng và tính nhất quán}
-Gói kết quả giữ giao thức, trạng thái, dự đoán CSV và confusion matrix NPZ. Đã tính lại Accuracy, Macro-F1, Weighted-F1 từ 5.847.990 dòng dự đoán ở bốn phạm vi, sai số so bảng tổng hợp không quá $10^{-8}$; hash ba CNN khớp giữa các phạm vi. Đối chứng dùng lại được ghi nguồn, không coi là quan sát độc lập mới. Kiểm tra nhãn/group giữa các lượt không thay thế xác minh nhãn độc lập trên ảnh nguồn.
+Gói kết quả lưu giao thức, trạng thái chạy, dự đoán CSV và ma trận nhầm lẫn NPZ. Nhóm đã tính lại Accuracy, Macro-F1 và Weighted-F1 từ 5.847.990 dòng dự đoán thuộc bốn phạm vi. Sai số so với bảng tổng hợp không quá $10^{-8}$, và hash ba CNN khớp giữa các phạm vi. Những đối chứng dùng lại đều được ghi nguồn, không xem là quan sát độc lập mới. Việc đối chiếu nhãn và group ID giữa các lượt giúp kiểm tra tính nhất quán, nhưng không thay thế kiểm tra nhãn trên ảnh nguồn.
 
-Bằng chứng gọn và provenance ở \path{report/evidence/final/}. ZIP không kèm ảnh GTSRB, cache hoặc weights enhancer tác giả; các đầu vào này được xác định bằng nguồn tải và cấu hình. Checkpoint CNN do nhóm huấn luyện được giữ để tái lập. SHA-256 phát hiện thay đổi file, không tự chứng minh tính đúng của kết luận nghiên cứu.
+Nhóm lưu bằng chứng và thông tin nguồn trong \path{report/evidence/final/}. ZIP kết quả không chứa ảnh GTSRB, cache hoặc trọng số pretrained của các mô hình tăng cường. Người chạy lại cần lấy những đầu vào đó theo nguồn và cấu hình đã ghi. ZIP vẫn giữ các checkpoint CNN do nhóm huấn luyện. SHA-256 giúp phát hiện file có thay đổi, nhưng tự nó không chứng minh kết luận nghiên cứu là đúng.

@@ -1,12 +1,12 @@
 \subsection{Phân tích lỗi ghép cặp và theo lớp}
 \label{sec:errors}
 \subsubsection{Định nghĩa được giúp và bị làm sai}
-Với cùng mã ảnh, mức suy giảm, noise seed và checkpoint, gọi $b_i,e_i,y_i$ là dự đoán Identity, dự đoán sau xử lý và nhãn thật:
+Nhóm ghép các dự đoán theo cùng mã ảnh, mức suy giảm, noise seed và checkpoint. Trong các công thức dưới đây, $b_i$ là dự đoán trên ảnh Identity, $e_i$ là dự đoán sau xử lý và $y_i$ là nhãn đúng. Nhóm đếm hai trường hợp: ảnh được sửa từ sai thành đúng ($H$) và ảnh bị đổi từ đúng thành sai ($D$).
 \begin{align}
 H&=\sum_i\mathbf1[b_i\ne y_i,\ e_i=y_i],\\
 D&=\sum_i\mathbf1[b_i=y_i,\ e_i\ne y_i].
 \end{align}
-Với $N$ ảnh ghép cặp, $\Delta\mathrm{Accuracy}=100(H-D)/N$ điểm phần trăm. Quan hệ này kiểm tra tính nhất quán; không dùng $H-D$ thay cho thay đổi Macro-F1. Hai nhóm còn lại là cùng đúng và cùng sai; nhóm cùng sai vẫn có thể đổi sang lớp sai khác.
+Với $N$ ảnh ghép cặp, mức thay đổi Accuracy là $\Delta\mathrm{Accuracy}=100(H-D)/N$ điểm phần trăm. Nhóm dùng quan hệ này để kiểm tra phép đếm với kết quả tổng hợp. Hiệu $H-D$ không thay thế chênh lệch Macro-F1 vì Macro-F1 được tính theo từng lớp. Ngoài hai nhóm trên, một ảnh có thể được dự đoán đúng ở cả hai lần hoặc sai ở cả hai lần. Với nhóm cùng sai, nhãn dự đoán sau xử lý vẫn có thể khác nhãn sai ban đầu.
 \par
 \begin{table}[!htbp]\centering
 \caption{Số ảnh trung bình được giúp ($H$), bị làm sai ($D$) mỗi lượt full-test 12.630 ảnh. Trung bình qua noise seed và checkpoint, không phải ảnh nguồn độc lập.}
@@ -16,10 +16,9 @@ Với $N$ ảnh ghép cặp, $\Delta\mathrm{Accuracy}=100(H-D)/N$ điểm phần
 
 Ở mức vừa, Gaussian rồi Gamma sửa đúng trung bình 1472,67 ảnh nhưng làm sai 29,22 ảnh mỗi lượt, tăng ròng 1443,44 ảnh, tương ứng 11,43 điểm phần trăm Accuracy. Lợi ích tổng thể vẫn đi kèm nhóm mẫu bị ảnh hưởng bất lợi. Tính cả hai hướng chuyển giúp tránh chỉ trình bày ví dụ được cải thiện.
 
-\clearpage
 \subsubsection{Ma trận nhầm lẫn và các cặp nhầm}
-Ma trận $C_{ab}$ có hàng là nhãn thật và cột là dự đoán. Chuẩn hóa hàng bằng support lớp thật giúp xem recall và cặp nhầm dù full-test mất cân bằng lớp.
-\fig{confusions_detail_1.png}{0.82}{Ma trận chuẩn hóa hàng của Identity và CLAHE, full-test mức nặng, checkpoint 11, noise seed 101. Mỗi hàng là một lớp thật; cột 5 biểu thị dự đoán giới hạn 80 km/h.}{fig:confusions}
+Trong ma trận $C_{ab}$, hàng biểu thị nhãn thật và cột biểu thị nhãn mô hình dự đoán. Nhóm chia mỗi hàng cho số ảnh thật của lớp đó để xem tỷ lệ nhận ra đúng lớp và tỷ lệ nhầm sang lớp khác. Cách chuẩn hóa này giúp đọc ma trận khi số ảnh giữa các lớp trên toàn bộ test không bằng nhau.
+\fig{confusions_detail_1.png}{0.69}{Ma trận chuẩn hóa hàng của Identity và CLAHE, full-test mức nặng, checkpoint 11, noise seed 101. Mỗi hàng là một lớp thật; cột 5 biểu thị dự đoán giới hạn 80 km/h.}{fig:confusions}
 \clearpage
 \fig{confusions_detail_2.png}{0.82}{Ma trận của diffusion và Gaussian rồi Gamma trên cùng 12.630 ảnh, mức, checkpoint và noise seed như Hình~\ref{fig:confusions}. Đây là một lát cắt xác định, không phải ma trận trung bình qua seed.}{fig:confusionsdetail}
 \clearpage
@@ -38,13 +37,13 @@ Lớp 5 là biển giới hạn 80 km/h, có 630/12.630 ảnh, tương ứng 4,9
 \tableinput{tables/class5_concentration}\bottomrule\end{tabular}}\label{tab:classfive}
 \end{table}\par
 
-Identity dự đoán lớp 5 cho 43,17\% ảnh dù tỷ lệ thật chỉ là 4,99\%; 38,32\% toàn tập bị gán sai vào lớp này. Gaussian rồi Gamma giảm tỷ lệ dự đoán lớp 5 còn 28,97\% nhưng vẫn tập trung mạnh; precision lớp 5 chỉ đạt 17,16\%. Diffusion có tỷ lệ dự đoán lớp 5 thấp hơn, 8,99\%, dù Macro-F1 tổng thể thấp hơn chuỗi được chọn. Như vậy, ưu thế trung bình không đồng nghĩa mọi kiểu lỗi đều được giảm tốt nhất.
+Identity dự đoán lớp 5 cho 43,17\% ảnh, trong khi tỷ lệ thật của lớp này chỉ là 4,99\%. Có 38,32\% toàn bộ ảnh bị gán sai vào lớp này. Gaussian rồi Gamma giảm tỷ lệ dự đoán lớp 5 còn 28,97\%, nhưng mức tập trung vẫn cao và precision lớp 5 chỉ đạt 17,16\%. Diffusion có tỷ lệ dự đoán lớp 5 thấp hơn, ở mức 8,99\%, dù Macro-F1 tổng thể thấp hơn chuỗi được chọn. Do đó, phương pháp có điểm trung bình tốt hơn chưa chắc giảm tốt nhất mọi kiểu lỗi.
 
-Các cột 5 đậm và những cặp nhầm như lớp 10/6/30 sang lớp 5 phản ánh xu hướng dồn quyết định về một lớp khi suy giảm nặng. Mất tương phản, nét số nhỏ và sai khác miền đầu vào là các giả thuyết phù hợp để kiểm tra; ma trận chưa chứng minh nguyên nhân nằm riêng ở màu hay hình dạng. Chưa đo activation, độ nhạy theo vùng hoặc so phân bố train nên không quy hiện tượng này trực tiếp cho mất cân bằng lớp. Sáu ảnh kiểm chứng ở phần sau cho thấy cả sửa đúng lẫn phát sinh nhầm 60 thành 80 km/h.
+Cột 5 đậm trong ma trận và các cặp nhầm từ lớp 10/6/30 sang lớp 5 cho thấy mô hình có xu hướng dồn dự đoán vào một lớp khi ảnh suy giảm nặng. Nhóm xem mất tương phản, nét số nhỏ và sự khác biệt của ảnh đầu vào so với dữ liệu huấn luyện là những giả thuyết cần kiểm tra. Ma trận chưa xác định nguyên nhân riêng là màu hay hình dạng. Nhóm cũng chưa đo đáp ứng bên trong mạng, độ nhạy theo vùng hoặc so sánh phân bố train, nên chưa quy trực tiếp hiện tượng này cho mất cân bằng lớp. Sáu ảnh ở phần sau minh họa cả lỗi được sửa và trường hợp 60 bị nhầm thành 80 km/h sau xử lý.
 
 
 \subsubsection{Các lớp khó và ví dụ có metadata}
-\fig{per_class_severe_detail.png}{1}{F1 từng lớp mức nặng trên full-test, tách lớp 0--21 và 22--42 để dễ đọc. Trung bình noise trong checkpoint rồi trung bình ba checkpoint; không phải khoảng tin cậy của camera thực.}{fig:classf1}
+\fig{per_class_severe_detail.png}{0.92}{F1 từng lớp mức nặng trên full-test, tách lớp 0--21 và 22--42 để dễ đọc. Trung bình noise trong checkpoint rồi trung bình ba checkpoint; không phải khoảng tin cậy của camera thực.}{fig:classf1}
 \par
 \begin{table}[!htbp]\centering
 \caption{Năm lớp có F1 thấp nhất của Gaussian rồi Gamma mức nặng. SD qua checkpoint sau trung bình noise; chênh lệch so Identity là điểm phần trăm.}
@@ -52,19 +51,19 @@ Các cột 5 đậm và những cặp nhầm như lớp 10/6/30 sang lớp 5 ph�
 \tableinput{tables/hard_classes}\bottomrule\end{tabular}\label{tab:hardclasses}\end{table}\par
 
 
-Macro-F1 tăng không có nghĩa mọi lớp đạt hiệu năng tốt. Các lớp khó vẫn có F1 thấp và cần xem cùng support, cặp nhầm và ảnh nguồn. Không quy một cặp nhầm chắc chắn cho mất nét số hoặc sai màu chỉ từ ma trận; đó là giả thuyết cần quan sát ảnh cụ thể để xác nhận.
+Mặc dù Macro-F1 tăng, một số lớp vẫn có F1 thấp. Nhóm cần đọc những lớp này cùng số ảnh thực tế, cặp nhầm và ảnh nguồn. Chỉ nhìn ma trận thì chưa thể khẳng định một cặp nhầm là do mất nét số hay sai màu. Nhóm cần quan sát ảnh cụ thể và có thêm phép kiểm tra để xác nhận những giả thuyết đó.
 \clearpage
 \subsubsection{Đối chiếu trực quan sáu mẫu kiểm chứng}
-Hình~\ref{fig:visualcases} dùng full-test mức vừa, checkpoint 11 và noise seed 101; mỗi nhóm lấy hai ID nhỏ nhất. Ảnh được cắt lại từ PPM chính thức theo đúng ROI, lề và phép nội suy; cả 12 dự đoán trên ảnh tối và ảnh xử lý đều khớp CSV đã kiểm chứng. Nhãn sáu ảnh được đối chiếu với annotations chính thức.
+Nhóm chọn các mẫu trong Hình~\ref{fig:visualcases} từ toàn bộ test ở mức vừa, sử dụng checkpoint 11 và noise seed 101. Mỗi nhóm lấy hai ID nhỏ nhất. Nhóm cắt lại ảnh PPM chính thức theo đúng ROI, lề và phép nội suy của thí nghiệm. Cả 12 dự đoán trên ảnh tối và ảnh đã xử lý đều khớp CSV đã kiểm chứng. Nhóm còn đối chiếu nhãn của sáu ảnh với chú thích chính thức.
 
 \begin{center}
-\includegraphics[width=\linewidth]{visual_error_cases.png}
+\includegraphics[width=0.90\linewidth]{visual_error_cases.png}
 \captionof{figure}{Ảnh gốc, ảnh tối và Gaussian rồi Gamma trên cùng sáu mẫu GTSRB~\cite{gtsrbdata}. Tên biển đi kèm Class ID; ID ảnh là phần cuối của \texttt{gtsrb/test/<ID>}. Các ảnh dùng cùng thang RGB, phóng bằng láng giềng gần nhất, không tự cân bằng sáng để hiển thị.}
 \label{fig:visualcases}
 \end{center}
 
 {\fontsize{11bp}{13bp}\selectfont
-\textbf{Được giúp:} 00010 đổi từ vòng xuyến sang đúng đường ưu tiên; 00020 đổi từ giới hạn 80 sang đúng 70 km/h. Nhiễu hạt giảm sau lọc, nhưng đầu ra vẫn tối; nhận dạng đúng không đòi hỏi ảnh phải sáng rõ hoàn toàn.\par
-\textbf{Bị làm sai:} 00176 đổi từ đúng 60 sang 80 km/h; 00513 đổi từ đúng đường gồ ghề sang ngoặt trái. Ảnh xử lý ít hạt hơn nhưng nét nhỏ vẫn mềm; giảm nhiễu không bảo đảm giữ đặc trưng phân lớp.\par
+\textbf{Được giúp:} Với ảnh 00010, mô hình đổi từ dự đoán vòng xuyến sang đúng đường ưu tiên. Với ảnh 00020, dự đoán đổi từ giới hạn 80 sang đúng 70 km/h. Nhóm quan sát thấy nhiễu hạt giảm sau lọc, dù ảnh đầu ra vẫn tối. Hai ví dụ này cho thấy nhận dạng đúng không đòi hỏi ảnh phải sáng rõ hoàn toàn.\par
+\textbf{Bị làm sai:} Với ảnh 00176, mô hình đang đoán đúng 60 nhưng đổi thành 80 km/h sau xử lý. Ảnh 00513 đổi từ đúng đường gồ ghề sang ngoặt trái. Ảnh đã lọc có ít hạt hơn, nhưng các nét nhỏ vẫn mềm. Nhóm vì vậy không thể coi giảm nhiễu là bảo đảm giữ được đặc trưng phân lớp.\par
 \textbf{Vẫn sai:} 00012 và 00013 còn rất tối sau xử lý, nét biểu tượng và chữ số chưa rõ đủ để dự đoán đúng. Hình cho phép quan sát hiện tượng, chưa xác định pixel hoặc cơ chế nào gây ra quyết định của CNN. Sáu mẫu không thay thế thống kê toàn tập.\par}
 \clearpage

@@ -1,23 +1,25 @@
 {
   "schema": "slide-editorial-review-v1",
-  "pages": 33,
-  "sha256": "1bb993cadb59d6941bc27a9d28eb3a8b696fe599f84496f4cccf7bd5659a73dc",
-  "source_sha256": "80dbe3e091c7f5694d4a6ce2e40976b2ff774dfc958f3f4aba3b4c099d485315",
-  "speaker_notes": 33,
+  "pages": 34,
+  "sha256": "f3fbcb81353d359af8a01c9eed982d3e3057e6c5ad39395ec0ceaae871462ecc",
+  "source_sha256": "d3b013dae379111d1a713d864dea39014dfe37a48e0b4f2d7f71b8bf20402985",
+  "speaker_notes": 34,
   "all_pages_visually_reviewed": true,
   "detail_pages_reviewed": [
     5,
     18,
     20,
-    28,
+    23,
+    24,
     29,
-    31,
-    32
+    30,
+    32,
+    33
   ],
-  "demo_page": 32,
+  "demo_page": 33,
   "demo_links_verified": [
     1,
-    32
+    33
   ],
   "research_numbers_unchanged": true,
   "latex_overflow_or_missing_reference_errors": [],
@@ -27,8 +29,15 @@
   ],
   "ranked_tables_pages": [
     22,
+    23,
     24,
-    25
+    25,
+    26
   ],
-  "ranking_rule": "Bold highest mean; underline second highest mean within each column. Dispersion is not ranked."
+  "ranking_rule": "Bold highest mean; underline second highest mean within each column. Dispersion is not ranked.",
+  "validation_configuration_pages": [
+    23,
+    24
+  ],
+  "noise_energy_slide_verified": 28
 }

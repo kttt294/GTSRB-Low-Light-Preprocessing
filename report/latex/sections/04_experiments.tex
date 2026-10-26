@@ -28,7 +28,7 @@ Chọn checkpoint & Macro-F1 validation clean tốt nhất \\
 
 Trong huấn luyện, các phép tăng cường nhẹ gồm xoay tối đa $10^\circ$, tịnh tiến tối đa 5\%, thay đổi nhẹ sáng/tương phản/bão hòa và xóa ngẫu nhiên một vùng nhỏ. Không lật ngang biển báo vì có thể thay đổi ý nghĩa hướng di chuyển. Cụm từ ``huấn luyện clean'' ở đây nghĩa là không huấn luyện bằng mô hình thiếu sáng Gamma--Poisson--Gaussian của thí nghiệm, không có nghĩa là loại bỏ mọi augmentation.
 
-Ba checkpoint tốt nhất nằm ở epoch 3, 6 và 14 tương ứng seed 11, 22 và 33; lịch sử huấn luyện kết thúc ở epoch 8, 11 và 15. Checkpoint lưu Macro-F1 validation cao nhất; bộ đếm dừng sớm dùng mức cải thiện tối thiểu 0,001 nên không nhất thiết dừng đúng năm epoch sau checkpoint cuối. Sau huấn luyện, trọng số được giữ cố định cho mọi phép xử lý.
+Nhóm thu được các checkpoint tốt nhất ở epoch 3, 6 và 14, tương ứng với seed 11, 22 và 33. Các lần huấn luyện kết thúc ở epoch 8, 11 và 15. Mã lưu checkpoint khi Macro-F1 validation đạt giá trị cao nhất, còn bộ đếm dừng sớm dùng mức cải thiện tối thiểu 0,001. Vì hai quy tắc này khác nhau, thời điểm dừng không nhất thiết cách checkpoint tốt nhất đúng năm epoch. Sau bước huấn luyện, nhóm giữ nguyên trọng số để so sánh mọi phép xử lý ảnh.
 
 \subsection{Chỉ số đánh giá nhận dạng}
 Accuracy là tỷ lệ mẫu được phân loại đúng:
@@ -42,18 +42,18 @@ R_c=\frac{TP_c}{TP_c+FN_c},\\
 F1_c&=\frac{2TP_c}{2TP_c+FP_c+FN_c},\qquad
 \operatorname{Macro\text{-}F1}=\frac{1}{43}\sum_{c=0}^{42}F1_c.
 \end{align}
-Nếu mẫu số bằng 0, chỉ số tương ứng được quy ước bằng 0 như trong mã nguồn. Mỗi lớp đóng góp như nhau vào Macro-F1, phù hợp với yêu cầu nhận dạng đầy đủ 43 loại biển báo. Weighted-F1 dùng số mẫu mỗi lớp làm trọng số và được lưu như metric bổ sung. Với tập con có đúng 10 ảnh/lớp, Weighted-F1 bằng Macro-F1 về mặt toán học; trên full-test có tần suất lớp khác nhau, hai chỉ số không nhất thiết bằng nhau.
+Nếu mẫu số bằng 0, nhóm quy ước chỉ số tương ứng bằng 0 như trong mã nguồn. Macro-F1 cho mỗi lớp đóng góp ngang nhau nên phù hợp với việc đánh giá đủ 43 loại biển báo. Nhóm còn lưu Weighted-F1 làm chỉ số bổ sung, trong đó trọng số là số ảnh của từng lớp. Với tập con có đúng 10 ảnh/lớp, Weighted-F1 bằng Macro-F1 về mặt toán học. Trên toàn bộ test, số ảnh mỗi lớp khác nhau nên hai chỉ số có thể khác nhau.
 
 Các bảng F1 trong báo cáo dùng Macro-F1 và ghi rõ đơn vị phần trăm. Chênh lệch giữa hai giá trị phần trăm được gọi là \textit{điểm phần trăm}, tránh nhầm với tỷ lệ cải thiện tương đối.
 
 
 
 \subsection{Giao thức chọn tham số và tổng hợp số liệu}
-Tham số của bảy bộ tăng cường được chọn trên 1.290 ảnh validation, cân bằng 30 ảnh/lớp. Điểm chọn là Macro-F1 trung bình qua ba mức suy giảm, ba noise seed và ba checkpoint. Gamma thử ba số mũ; CLAHE thử sáu cấu hình; MSR thử hai bộ tỉ lệ. Mô hình sâu giữ trọng số tác giả. Với nhóm tăng sáng, các phương án cách điểm tốt nhất dưới 0,005 được so tiếp theo độ trễ; diffusion được chọn với Macro-F1 validation 72,77\%, so với CLAHE 68,86\%.
+Nhóm chọn tham số của bảy phương pháp tăng cường trên 1.290 ảnh validation, với 30 ảnh cho mỗi lớp. Điểm lựa chọn là Macro-F1 trung bình qua ba mức suy giảm, ba noise seed và ba checkpoint. Nhóm thử ba số mũ cho Gamma, sáu cấu hình cho CLAHE và hai bộ tỉ lệ cho MSR. Các mô hình học sâu giữ nguyên trọng số pretrained. Trong nhóm tăng sáng, nếu điểm của một phương án cách điểm tốt nhất dưới 0,005, nhóm so tiếp theo độ trễ. Diffusion được chọn với Macro-F1 validation 72,77\%, còn CLAHE đạt 68,86\%.
 
-Khảo sát khử nhiễu dùng lại đúng tập validation và các checkpoint này. Đầu tiên chọn độ mạnh của mỗi bộ lọc khi chạy đơn lẻ, sau đó giữ nguyên tham số khi so hai thứ tự với Gamma và CLAHE. Sáu cấu hình bộ lọc và 12 chuỗi được đánh giá thêm; khi chọn độ mạnh xong, có 19 phương pháp test gồm bốn đối chứng và 15 cấu hình khử nhiễu/kết hợp. Ứng viên tổng thể được chọn bằng Macro-F1 validation lớn nhất; không chọn lại từ bảng test. Đây là tìm kiếm tuần tự trên lưới hữu hạn, không tối ưu đồng thời tham số bộ lọc, enhancer và thứ tự.
+Nhóm sử dụng lại tập validation và các checkpoint trên khi khảo sát khử nhiễu. Đầu tiên, nhóm chọn độ mạnh cho từng bộ lọc khi chạy riêng lẻ. Sau đó, nhóm giữ tham số này khi so sánh hai thứ tự kết hợp với Gamma và CLAHE. Validation được dùng để đánh giá thêm sáu cấu hình bộ lọc và 12 chuỗi xử lý. Sau khi chọn độ mạnh, tập test khảo sát 19 phương pháp, gồm bốn đối chứng và 15 cấu hình khử nhiễu hoặc kết hợp. Nhóm chọn ứng viên tổng thể theo Macro-F1 validation cao nhất, không chọn lại bằng điểm test. Đây là cách tìm tuần tự trong một lưới hữu hạn, chưa tối ưu đồng thời mọi tham số và thứ tự.
 
-Trong mọi bảng, trung bình qua noise seed trước trong từng checkpoint rồi mới lấy mean và độ lệch chuẩn mẫu qua ba checkpoint:
+Để tổng hợp số liệu trong các bảng, nhóm lấy trung bình qua noise seed trong từng checkpoint trước. Sau đó, nhóm tính trung bình và độ lệch chuẩn mẫu qua ba checkpoint theo công thức:
 \begin{equation}
 \overline m_t=\frac{1}{3}\sum_{n=1}^{3}m_{t,n},\quad
 \mu=\frac{1}{3}\sum_{t=1}^{3}\overline m_t,\quad
@@ -62,7 +62,7 @@ s=\sqrt{\frac{\sum_t(\overline m_t-\mu)^2}{2}}.
 Các noise seed và checkpoint sử dụng chung ảnh, không được coi là những ảnh độc lập. Độ lệch chuẩn qua checkpoint cũng không đo mức biến thiên PSNR/SSIM giữa ảnh.
 
 \subsection{Phạm vi đánh giá và kiểm tra bằng chứng}
-Nhóm tăng sáng có $3+3\times3\times3\times8=219$ lượt ở mỗi phạm vi: subset 430 ảnh và full-test 12.630 ảnh. Khảo sát khử nhiễu có $3+27\times19=516$ lượt subset. Full-test giữ tám phương pháp được khóa bằng validation, gồm các đối chứng, bộ lọc tốt nhất, cả hai thứ tự của cặp được chọn và ứng viên tổng thể tốt nhất; tổng cộng 219 lượt. Việc sàng lọc full-test được thực hiện trước khi đọc kết quả subset.
+Với nhóm tăng sáng, nhóm thực hiện $3+3\times3\times3\times8=219$ lượt cho mỗi phạm vi, gồm tập con 430 ảnh và toàn bộ test 12.630 ảnh. Khảo sát khử nhiễu có $3+27\times19=516$ lượt trên tập con. Khi đánh giá toàn bộ test, nhóm giữ tám phương pháp đã chọn bằng validation, gồm các đối chứng, bộ lọc tốt nhất, cả hai thứ tự của cặp được chọn và ứng viên tổng thể. Phạm vi này có tổng cộng 219 lượt. Nhóm xác định danh sách phương pháp trước khi đọc kết quả trên tập con.
 \par
 \begin{table}[!htbp]\centering
 \caption{Phạm vi và số dòng dự đoán đã kiểm tra; bao gồm đối chứng dùng lại, không phải toàn bộ quan sát độc lập.}
@@ -74,7 +74,7 @@ Khử nhiễu/kết hợp, full-test & 12.630 & 219 & 2.765.970\\\bottomrule
 \end{tabular}\label{tab:coverage}\end{table}\par
 
 
-Tổng cộng 5.847.990 dòng dự đoán được đối chiếu ID, nhãn, group ID và cấu hình. Accuracy, Macro-F1, Weighted-F1 được tính lại và khớp bảng tổng hợp với sai số tuyệt đối không quá $10^{-8}$. Confusion matrix lưu trong ZIP được đối chiếu cho 954 lượt có ma trận; subset tăng sáng được tính lại từ CSV. Hash ba checkpoint nhất quán giữa cả bốn phạm vi. Đối chứng được dùng lại chính xác thay vì suy luận lại; số dòng lưu thêm không làm tăng số ảnh nguồn. Các bảng được sinh từ cùng gói kết quả và biên bản trong \path{report/evidence/final/}.
+Nhóm kiểm tra tổng cộng 5.847.990 dòng dự đoán bằng cách đối chiếu mã ảnh, nhãn, group ID và cấu hình. Các chỉ số Accuracy, Macro-F1 và Weighted-F1 được tính lại từ dự đoán, khớp bảng tổng hợp với sai số tuyệt đối không quá $10^{-8}$. Nhóm đối chiếu ma trận nhầm lẫn trong ZIP cho 954 lượt đã lưu ma trận. Riêng phần tăng sáng trên tập con, ma trận được tính lại từ CSV. Hash của ba checkpoint khớp giữa bốn phạm vi đánh giá. Những đối chứng được dùng lại vẫn giữ nguyên dự đoán, nên số dòng lưu thêm không có nghĩa là có thêm ảnh nguồn độc lập. Các bảng và biên bản kiểm tra được lưu trong \path{report/evidence/final/}.
 
 \subsection{Chất lượng ảnh của các phương pháp tăng sáng}
 \par
@@ -83,7 +83,7 @@ Tổng cộng 5.847.990 dòng dự đoán được đối chiếu ID, nhãn, gro
 {\small\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
 \tableinput{tables/quality}\bottomrule\end{tabular}}\label{tab:quality}\end{table}\par
 
-Các phương pháp làm thay đổi cả độ sáng, cấu trúc và nhiễu. Phương pháp có PSNR cao nhất không nhất thiết có SSIM cao nhất; xếp hạng cũng thay đổi theo mức suy giảm. Bảng này mô tả chất lượng trên subset. Phân tích tương quan ở phần sau sử dụng chất lượng ảnh và nhận dạng cùng đo trên full-test, không ghép hai phạm vi.
+Các phương pháp không chỉ thay đổi độ sáng mà còn tác động đến cấu trúc và nhiễu của ảnh. Khi đọc bảng, nhóm nhận thấy phương pháp có PSNR cao nhất chưa chắc có SSIM cao nhất. Thứ hạng còn thay đổi theo mức suy giảm. Bảng này chỉ trình bày chất lượng trên tập con. Ở phần tương quan, nhóm dùng các chỉ số ảnh và nhận dạng cùng đo trên toàn bộ test để tránh ghép hai phạm vi khác nhau.
 
 \subsection{Nhận dạng trên subset 430 ảnh}
 \par
@@ -98,7 +98,7 @@ Các phương pháp làm thay đổi cả độ sáng, cấu trúc và nhiễu. 
 {\small\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
 \tableinput{tables/subset_f1}\bottomrule\end{tabular}}\label{tab:subsetf1}\end{table}\par
 
-Macro-F1 của Identity lần lượt là 88,33\%; 72,79\%; 53,45\% ở mức nhẹ, vừa và nặng; diffusion đạt 91,75\%; 78,89\%; 58,96\%. Sự suy giảm còn lại ở mức nặng cho thấy nâng sáng không thể khôi phục hoàn toàn thông tin. Các khoảng cách phải được đọc cùng SD qua checkpoint.
+Trên tập con, Identity đạt Macro-F1 lần lượt là 88,33\%, 72,79\% và 53,45\% ở mức nhẹ, vừa và nặng. Diffusion đạt các giá trị tương ứng là 91,75\%, 78,89\% và 58,96\%. Mặc dù diffusion cải thiện kết quả so với giữ nguyên ảnh tối, hiệu năng ở mức nặng vẫn thấp hơn nhiều so với ảnh gốc. Điều đó cho thấy phép tăng cường chưa khắc phục hết tác động của suy giảm. Nhóm đọc các chênh lệch này cùng độ lệch chuẩn qua checkpoint.
 \fig{subset_f1.png}{0.95}{Macro-F1 trên subset; cùng checkpoint và cùng ảnh tối được dùng cho các phương pháp.}{fig:subsetf1}
 
 \subsection{Đánh giá tăng sáng trên full-test}
@@ -108,17 +108,17 @@ Macro-F1 của Identity lần lượt là 88,33\%; 72,79\%; 53,45\% ở mức nh
 {\small\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
 \tableinput{tables/fulltest}\bottomrule\end{tabular}}\label{tab:full}\end{table}\par
 
-Trên ảnh clean, Accuracy đạt $99,22\%\pm0,28$ và Macro-F1 đạt $98,94\%\pm0,32$. Identity đạt Macro-F1 90,45\%; 76,07\%; 58,37\%, còn diffusion đạt 93,63\%; 81,57\%; 62,46\%. Đây là đánh giá trên cùng ba CNN, không huấn luyện lại theo phương pháp. Chênh lệch với subset đến từ phạm vi ảnh khác nhau; hai bảng được tổng hợp riêng.
+Trên ảnh gốc chưa tạo suy giảm, ResNet-18 đạt Accuracy $99,22\%\pm0,28$ và Macro-F1 $98,94\%\pm0,32$. Với ảnh suy giảm giữ nguyên, Identity đạt Macro-F1 90,45\%, 76,07\% và 58,37\% theo ba mức. Diffusion đạt 93,63\%, 81,57\% và 62,46\%. Các kết quả đều sử dụng cùng ba CNN, không huấn luyện lại theo phương pháp xử lý. Nhóm tổng hợp riêng kết quả trên tập con và toàn bộ test vì hai phạm vi có số ảnh và phân bố lớp khác nhau.
 
 \subsection{Khử nhiễu và các chuỗi kết hợp}
-Trên validation, Gaussian chọn kernel $5\times5$, $\sigma=0,8$; bilateral chọn $d=5$, $\sigma_c=0,10$, $\sigma_s=3$; NLM chọn $h=h_{\mathrm{color}}=7$, cửa sổ mẫu 3 và tìm kiếm 7. Chuỗi Gaussian rồi Gamma đạt 77,77\% Macro-F1 validation, cao hơn diffusion 72,77\%, và được chọn trước test.
+Từ kết quả validation, nhóm chọn Gaussian với kernel $5\times5$ và $\sigma=0,8$. Bilateral sử dụng $d=5$, $\sigma_c=0,10$ và $\sigma_s=3$. Với NLM, nhóm chọn $h=h_{\mathrm{color}}=7$, cửa sổ mẫu 3 và cửa sổ tìm kiếm 7. Chuỗi Gaussian rồi Gamma đạt Macro-F1 validation 77,77\%, cao hơn diffusion ở mức 72,77\%. Vì vậy, nhóm chọn chuỗi này trước khi đánh giá test.
 \par
 \begin{table}[!htbp]\centering
 \caption{Macro-F1 (\%) của 15 cấu hình khử nhiễu/kết hợp trên subset. Mũi tên là thứ tự áp dụng; cùng tham số bộ lọc cho mỗi cặp.}
 {\fontsize{10.5bp}{12bp}\selectfont\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
 \tableinput{tables/extension_subset}\bottomrule\end{tabular}}\label{tab:extsubset}\end{table}\par
 
-Gaussian đơn lẻ cải thiện nhận dạng dù không chủ động tăng sáng. Bilateral rồi tăng sáng thường tốt hơn thứ tự ngược trong tập cấu hình này; với NLM, xu hướng có thể đổi chiều. Không có quy tắc thứ tự chung cho mọi bộ lọc. Giữ cùng độ mạnh trong mỗi cặp là điều kiện để diễn giải khác biệt.
+Gaussian đơn lẻ giúp cải thiện nhận dạng mặc dù bộ lọc không chủ động nâng sáng ảnh. Trong các cấu hình đã thử, bilateral rồi tăng sáng thường cho điểm tốt hơn thứ tự ngược lại. Với NLM, xu hướng có thể khác. Do đó, nhóm chưa tìm được một quy tắc thứ tự chung cho cả ba bộ lọc. Việc giữ cùng độ mạnh trong mỗi cặp là điều kiện cần để diễn giải phần chênh lệch do thứ tự.
 \par
 \begin{table}[!htbp]\centering
 \caption{Macro-F1 (\%) của tám phương pháp đã khóa cho full-test. Gaussian $\to$ Gamma được chọn bằng validation.}
@@ -131,17 +131,17 @@ Gaussian đơn lẻ cải thiện nhận dạng dù không chủ động tăng s
 {\fontsize{10.5bp}{12bp}\selectfont\begin{tabular}{lccc}\toprule Phương pháp & Nhẹ & Vừa & Nặng\\\midrule
 \tableinput{tables/extension_acc}\bottomrule\end{tabular}}\label{tab:extacc}\end{table}\par
 
-Gaussian rồi Gamma đạt Macro-F1 96,70\%; 85,54\%; 71,56\%, tăng 6,25; 9,47; 13,19 điểm phần trăm so Identity. Ở mức vừa, Accuracy tăng từ 72,32\% lên 83,75\%. Ở mức nặng, CLAHE rồi Gaussian có điểm test cao hơn chuỗi được chọn khoảng 0,21 điểm phần trăm. Kết quả này được báo cáo để phân tích, không dùng thay quyết định validation; khoảng cách nhỏ chưa chứng minh ưu thế thống kê.
+Trên toàn bộ test, Gaussian rồi Gamma đạt Macro-F1 96,70\%, 85,54\% và 71,56\% ở ba mức suy giảm. Mức tăng so với Identity lần lượt là 6,25, 9,47 và 13,19 điểm phần trăm. Ở mức vừa, Accuracy tăng từ 72,32\% lên 83,75\%. Riêng mức nặng, CLAHE rồi Gaussian cao hơn chuỗi được chọn khoảng 0,21 điểm phần trăm. Nhóm vẫn giữ lựa chọn từ validation thay vì thay đổi sau khi thấy test. Chênh lệch nhỏ này cũng chưa đủ để kết luận ưu thế thống kê.
 \fig{extension_f1.png}{0.95}{Full-test giữa đối chứng, tăng sáng, Gaussian đơn lẻ và hai chuỗi đại diện.}{fig:extensionf1}
 
 \subsection{Ảnh hưởng của thứ tự trên full-test}
-Cặp Gaussian--CLAHE được validation chọn để giữ cả hai thứ tự trên full-test. Lấy CLAHE rồi Gaussian trừ Gaussian rồi CLAHE, chênh lệch Macro-F1 trung bình là $+0,17$, $+0,11$ và $+0,15$ điểm phần trăm ở ba mức. Một số checkpoint/noise seed có chênh lệch âm. Đây là ưu thế trung bình nhỏ trong cấu hình cụ thể, không phải kết luận thứ tự sau luôn tốt hơn.
+Nhóm giữ cả hai thứ tự của cặp Gaussian--CLAHE trên toàn bộ test theo quy tắc chọn bằng validation. Khi lấy điểm của CLAHE rồi Gaussian trừ điểm của Gaussian rồi CLAHE, chênh lệch Macro-F1 trung bình là $+0,17$, $+0,11$ và $+0,15$ điểm phần trăm ở ba mức. Tuy nhiên, một số tổ hợp checkpoint và noise seed cho chênh lệch âm. Như vậy, thứ tự CLAHE rồi Gaussian chỉ nhỉnh hơn trung bình trong cấu hình đang xét, chưa phải lựa chọn luôn tốt hơn ở mọi lượt.
 
-Full-test chỉ có Gaussian rồi Gamma, không có Gamma rồi Gaussian; cặp Gamma chỉ được so thứ tự trực tiếp trên validation và subset. Không suy rộng cặp CLAHE sang mọi phép tăng sáng.
+Trên toàn bộ test, nhóm chỉ đánh giá Gaussian rồi Gamma, không có chiều Gamma rồi Gaussian. Hai chiều của cặp Gamma chỉ được so trực tiếp trên validation và tập con. Vì vậy, kết quả thứ tự của Gaussian--CLAHE không được dùng để kết luận thay cho cặp Gamma hoặc các phép tăng sáng khác.
 
-Để lượng hóa bất định của chênh lệch này, nghiên cứu dùng paired bootstrap~\cite{bootstrap} với 2.000 lần lấy mẫu lại, seed 20261025. Đơn vị lấy mẫu là ảnh nguồn test: trong từng lớp lấy có hoàn lại đúng số ảnh ban đầu, và dùng cùng số lần lặp mỗi ID cho hai phương pháp, cả ba checkpoint và ba noise seed. Tính lại Macro-F1 từng lượt, trung bình noise trong checkpoint rồi trung bình checkpoint. Không lấy chín lượt seed làm chín tập ảnh độc lập.
+Nhóm sử dụng paired bootstrap~\cite{bootstrap} để ước lượng mức bất định của chênh lệch thứ tự. Thí nghiệm gồm 2.000 lần lấy mẫu lại với seed 20261025. Trong từng lớp, nhóm lấy có hoàn lại đúng số ảnh test ban đầu. Cùng một số lần xuất hiện của mỗi ID được áp dụng cho cả hai phương pháp, ba checkpoint và ba noise seed. Sau đó, nhóm tính lại Macro-F1 từng lượt, lấy trung bình noise trong checkpoint rồi trung bình qua checkpoint. Nhóm không xem chín tổ hợp seed là chín tập ảnh độc lập.
 
-Báo cáo hai khoảng percentile 95\%: (i) chỉ lấy mẫu ảnh, giữ cố định các CNN; (ii) lấy mẫu thêm ba nhóm checkpoint có hoàn lại, mỗi nhóm giữ ba noise seed. Khoảng thứ hai phản ánh thêm biến động do huấn luyện, nhưng chỉ có ba nhóm nên vẫn là ước lượng khám phá. Cả hai đều giả định ảnh test độc lập vì GTSRB không cung cấp track test đã kiểm chứng; không bao phủ tương quan giữa các ảnh cùng biển thực nếu có. Đây là khoảng riêng từng mức, chưa hiệu chỉnh cho ba so sánh.
+Nhóm báo cáo hai khoảng percentile 95\%. Khoảng thứ nhất chỉ lấy mẫu lại ảnh và giữ nguyên các CNN. Khoảng thứ hai lấy mẫu thêm ba nhóm checkpoint có hoàn lại, trong đó mỗi nhóm vẫn giữ ba noise seed. Khoảng thứ hai phản ánh thêm biến động huấn luyện, nhưng chỉ có ba nhóm nên kết quả vẫn mang tính thăm dò. Cả hai cách đều giả định các ảnh test độc lập vì nhóm chưa có track test được xác minh. Do đó, khoảng ước lượng chưa bao phủ phụ thuộc giữa ảnh cùng một biển thực tế nếu có. Các khoảng được tính riêng từng mức và chưa hiệu chỉnh cho ba phép so sánh.
 
 \par\begin{table}[!htbp]\centering
 \caption{Chênh lệch Macro-F1, CLAHE rồi Gaussian trừ Gaussian rồi CLAHE, đơn vị điểm phần trăm. Khoảng tin cậy percentile 95\% từ cùng ảnh ghép cặp.}
@@ -150,4 +150,4 @@ Mức & Chênh lệch & CI chỉ ảnh & CI checkpoint + ảnh\\\midrule
 \tableinput{tables/order_bootstrap}\bottomrule\end{tabular}}\label{tab:orderci}
 \end{table}\par
 
-Khoảng chỉ ảnh đều nằm trên 0 trong các CNN đang giữ cố định. Khi lấy mẫu cả checkpoint, ba khoảng đều chứa 0: ưu thế trung bình nhỏ chưa ổn định theo biến động huấn luyện. Điều này không chứng minh hai thứ tự tương đương; cần thêm lần huấn luyện độc lập và giao thức lấy mẫu phù hợp để kết luận rộng hơn.
+Khi chỉ lấy mẫu lại ảnh, các khoảng đều nằm trên 0 đối với những CNN đang giữ cố định. Khi lấy mẫu cả checkpoint, cả ba khoảng đều chứa 0. Nhóm vì vậy chưa có đủ cơ sở để nói ưu thế trung bình nhỏ này sẽ ổn định nếu huấn luyện lại mô hình. Kết quả cũng không chứng minh hai thứ tự tương đương. Để kết luận rộng hơn, nhóm cần thêm các lần huấn luyện độc lập và cách lấy mẫu phù hợp với cấu trúc dữ liệu.

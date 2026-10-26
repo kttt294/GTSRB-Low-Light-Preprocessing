@@ -1,8 +1,8 @@
 \section{ĐỀ XUẤT QUY TRÌNH TIỀN XỬ LÝ}
 \subsection{Tiêu chí lựa chọn}
-Mục tiêu là nhận dạng đủ 43 lớp, nên Macro-F1 validation dùng để chọn xử lý; Accuracy và Weighted-F1 kiểm tra bổ sung. PSNR/SSIM giải thích thay đổi ảnh, không quyết định thay hiệu năng nhận dạng. Diffusion được chọn trong nhóm tăng sáng; sau xét thêm khử nhiễu và thứ tự, Gaussian rồi Gamma đạt điểm validation cao nhất (77,77\%) và được chọn trước test.
+Nhóm lựa chọn quy trình theo mục tiêu nhận dạng đủ 43 lớp biển báo, nên dùng Macro-F1 trên validation làm tiêu chí chính. Accuracy và Weighted-F1 được dùng để kiểm tra thêm. PSNR và SSIM giúp giải thích ảnh đã thay đổi như thế nào, nhưng không thay thế kết quả nhận dạng. Trong nhóm tăng sáng, diffusion được chọn trước. Sau khi khảo sát thêm khử nhiễu và thứ tự kết hợp, Gaussian rồi Gamma đạt Macro-F1 validation cao nhất là 77,77\% và được chọn để đánh giá test.
 
-Quy trình được chọn không nhất thiết cao nhất ở mọi ô test. CLAHE rồi Gaussian có điểm test mức nặng nhỉnh hơn, nhưng thay lựa chọn sau khi thấy test sẽ làm sai vai trò tập kiểm tra. Mục tiêu khác, như ràng buộc độ trễ, cần được xác định và đánh giá bằng validation.
+Quy trình được chọn không nhất thiết đạt điểm cao nhất ở mọi mức test. Chẳng hạn, CLAHE rồi Gaussian nhỉnh hơn ở mức nặng. Nếu nhóm đổi lựa chọn sau khi đọc kết quả này, tập test sẽ không còn giữ đúng vai trò kiểm tra cuối cùng. Nếu mục tiêu ứng dụng có thêm giới hạn về độ trễ, nhóm cũng cần đặt tiêu chí đó trước và lựa chọn bằng validation.
 
 \subsection{Quy trình được lựa chọn}
 \par\begin{figure}[!htbp]\centering\setlength{\fboxsep}{7pt}
@@ -27,14 +27,14 @@ Resize $224\times224$ + chuẩn hóa ImageNet một lần\\[3pt]$\downarrow$\\[3
 ResNet-18 cố định $\to$ một trong 43 lớp
 }}\caption{Hai nguồn đầu vào dùng chung chuỗi được chọn trên validation. Chỉ nhánh A sinh suy giảm và dùng ảnh gốc để tính PSNR/SSIM ở $64\times64$; nhánh B mô tả cách áp dụng, chưa được đánh giá trên ảnh camera thực.}\label{fig:pipeline}\end{figure}\par
 
-Crop thiếu sáng thực đi trực tiếp vào khối lọc và Gamma sau chuẩn hóa. Luồng này giả định ROI đã được cung cấp, không bổ sung detector. Nhãn và ảnh sáng tham chiếu không được đưa vào pipeline. Bộ đánh giá mới dùng ảnh tham chiếu để đo chất lượng và nhãn để chấm phân loại. Bộ lọc dùng \texttt{BORDER\_REFLECT\_101}; không có chuyển 8 bit trong chuỗi Gaussian--Gamma.
+Khi áp dụng cho ảnh thiếu sáng đã có sẵn, nhóm chỉ chuẩn bị ảnh rồi đưa vào khối lọc và Gamma, không tạo thêm suy giảm. Luồng này giả định vùng biển báo đã được cung cấp và chưa có mô hình phát hiện vị trí. Nhãn và ảnh sáng tham chiếu không được đưa vào chuỗi xử lý. Chỉ bộ đánh giá dùng chúng để đo chất lượng và kiểm tra phân loại. Trong cài đặt, bộ lọc dùng \texttt{BORDER\_REFLECT\_101}, và chuỗi Gaussian--Gamma không chuyển ảnh sang 8 bit.
 
-Đầu ra được kiểm tra kích thước, ba kênh, miền giá trị và tính hữu hạn. Ba checkpoint giữ nguyên, không thích nghi theo test. Điểm validation và F1 full-test không tự tạo thành bảo đảm an toàn cho hệ thống hỗ trợ lái xe.
+Nhóm kiểm tra ảnh đầu ra về kích thước, số kênh, miền giá trị và các giá trị không hữu hạn. Ba checkpoint nhận dạng được giữ nguyên, không cập nhật theo ảnh test. Dù điểm validation và F1 test được cải thiện, nhóm chưa xem đây là bảo đảm an toàn cho một hệ thống hỗ trợ lái xe thực tế.
 
 \subsection{Đối chứng và tổ chức cài đặt}
-Identity, Gamma, CLAHE, diffusion và Gaussian đơn lẻ giúp phân biệt lợi ích từng thành phần. So hai thứ tự Gaussian--CLAHE giữ clip limit 1, lưới $4\times4$ và cùng tham số Gaussian. Đổi cả độ mạnh lẫn thứ tự sẽ không còn cô lập được ảnh hưởng của thứ tự.
+Nhóm dùng Identity, Gamma, CLAHE, diffusion và Gaussian đơn lẻ để phân biệt lợi ích của các thành phần. Khi so hai thứ tự Gaussian--CLAHE, nhóm giữ clip limit 1, lưới $4\times4$ và cùng tham số Gaussian. Nếu đồng thời thay đổi cả độ mạnh và thứ tự, nhóm sẽ khó xác định chênh lệch đến từ yếu tố nào.
 
-Mã xử lý ở \path{src/degradation.py}, \path{src/enhancement.py} và \path{src/tools/processing_pipeline.py}. \path{src/tools/processing_study.py} chọn tham số, khóa giao thức; \path{src/metrics.py} tính metric; cấu hình ở \path{configs/}. Tham số, split, mã ảnh và hash checkpoint đi kèm kết quả để tái lập từng phép so sánh.
+Mã tạo suy giảm nằm trong \path{src/degradation.py}, còn các bộ tăng cường nằm trong \path{src/enhancement.py}. Nhóm cài đặt chuỗi kết hợp tại \path{src/tools/processing_pipeline.py} và dùng \path{src/tools/processing_study.py} để chọn tham số, cố định giao thức đánh giá. Tệp \path{src/metrics.py} tính các chỉ số, còn \path{configs/} lưu cấu hình. Kết quả đi kèm tham số, cách chia tập, mã ảnh và hash checkpoint để người đọc có thể kiểm tra từng phép so sánh.
 
 \subsection{Hướng đánh giá tiếp theo}
-Ưu tiên dữ liệu thiếu sáng thực có nhãn tương thích, kiểm tra lỗi nét số/biên/màu và toàn cảnh có detector. Không có ảnh sáng ghép cặp chính xác thì không tính PSNR/SSIM như thí nghiệm tổng hợp. Cần thêm kiến trúc nhận dạng, điều kiện thu nhận và lần huấn luyện độc lập. Khi có track test đáng tin cậy, nên lấy mẫu lại theo track thay cho từng ảnh; khoảng bootstrap hiện tại chưa xử lý được nguồn phụ thuộc này.
+Nếu tiếp tục đề tài, nhóm sẽ ưu tiên bổ sung ảnh thiếu sáng thực có nhãn biển báo phù hợp. Nhóm cần xem các lỗi về nét số, đường viền và màu, sau đó mở rộng sang ảnh toàn cảnh có mô hình phát hiện biển báo. Khi không có ảnh sáng ghép cặp chính xác, nhóm không thể tính PSNR và SSIM theo cách của thí nghiệm tổng hợp. Nhóm cũng cần thử thêm kiến trúc nhận dạng, điều kiện chụp và lần huấn luyện độc lập. Nếu xác minh được track test, nhóm nên lấy mẫu lại theo track thay vì từng ảnh. Khoảng bootstrap hiện tại chưa tính được nguồn phụ thuộc này.

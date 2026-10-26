@@ -507,19 +507,47 @@ Diffusion & \textbf{93,63} $\pm$ 2,13 & \textbf{81,57} $\pm$ 4,98 & \textbf{62,4
 \end{frame}
 
 \paperreference{}
-\begin{frame}{5.2. Chọn bộ lọc và thứ tự bằng validation trước test}
-\begin{enumerate}
-\item Thử Gaussian, bilateral và NLM với hai độ mạnh mỗi bộ lọc.
-Chọn tham số bằng kết quả nhận dạng trên validation.
-\item Ghép mỗi bộ lọc với Gamma hoặc CLAHE theo hai thứ tự:
-$3\times2\times2=12$ chuỗi xử lý.
-\item Giữ cùng tham số bộ lọc khi đảo thứ tự, để so sánh có kiểm soát.
-\item Khóa phương pháp trước khi đánh giá toàn bộ 12.630 ảnh test.
-Không chọn lại theo ô kết quả test cao nhất.
-\end{enumerate}
-\takeaway{Validation chọn Gaussian $5\times5$, $\sigma=0,8$ rồi Gamma $\alpha=0,8$.}
-\captionnote{Macro-F1 validation: chuỗi được chọn 77,77\%, diffusion 72,77\%. Không huấn luyện lại ResNet-18 theo từng phương pháp.}
-\note{Tập con 430 ảnh dùng phân tích riêng, không dùng để chọn phương pháp full-test. Các cấu hình còn lại được giữ theo quy tắc validation để làm đối chứng. Nguồn: báo cáo mục 3.10, 4.8; configs/processing_extension.json.}
+\begin{frame}{5.2. Chọn cấu hình cho từng bộ lọc trên validation}
+Nhóm thử riêng từng bộ lọc trên \textbf{1.290 ảnh validation} (30 ảnh/lớp).
+Trong mỗi bộ lọc, giữ cấu hình có Macro-F1 cao hơn.
+\par\vspace{2mm}
+{\smalltable\renewcommand{\arraystretch}{1.10}\begin{tabular}{lp{8.0cm}rc}\toprule
+Bộ lọc & Cấu hình đã thử & F1 (\%) & Giữ\\\midrule
+Gaussian & Cửa sổ $3\times3$, $\sigma=0,5$ & 71,38 & ---\\
+Gaussian & Cửa sổ $5\times5$, $\sigma=0,8$ & \textbf{74,76} & Có\\\midrule
+Bilateral & $d=5$, $\sigma_{\mathrm{color}}=0,05$, $\sigma_{\mathrm{space}}=1,5$ & 66,50 & ---\\
+Bilateral & $d=5$, $\sigma_{\mathrm{color}}=0,10$, $\sigma_{\mathrm{space}}=3$ & \underline{71,54} & Có\\\midrule
+NLM & $h=h_{\mathrm{color}}=3$, patch $3\times3$, tìm kiếm $7\times7$ & 65,47 & ---\\
+NLM & $h=h_{\mathrm{color}}=7$, patch $3\times3$, tìm kiếm $7\times7$ & 67,39 & Có\\\bottomrule
+\end{tabular}}
+\par\vspace{1mm}
+{\small Bilateral: $d$ là đường kính vùng lọc, hai $\sigma$ điều khiển trọng số theo màu và khoảng cách.
+NLM: $h,h_{\mathrm{color}}$ điều khiển mức lọc trên độ sáng và màu.}
+\takeaway{Giữ một cấu hình mỗi bộ lọc, rồi ghép với bước tăng cường ảnh.}
+\captionnote{F1 trung bình qua 3 mức suy giảm, 3 phiên bản nhiễu và 3 mô hình ResNet-18 cố định.}
+\note{Hai cấu hình mỗi bộ lọc lấy nguyên từ configs/processing_extension.json. Điểm lấy từ strength_gaussian.json, strength_bilateral.json và strength_nlm.json trong ZIP Kaggle v2 đã kiểm chứng. Gaussian: 71.38124 và 74.75975. Bilateral: 66.49719 và 71.54210. NLM: 65.47225 và 67.39439. Điểm là trung bình 27 lần đánh giá trên cùng 1.290 ảnh validation. Không phải kết quả toàn bộ 7.829 ảnh validation. Bilateral dùng RGB float [0,1], NLM dùng tham số OpenCV thang 8 bit. Chọn bộ lọc độc lập trước, không tối ưu lại tham số riêng cho mỗi chuỗi.}
+\end{frame}
+
+\paperreference{}
+\begin{frame}{5.2. So sánh 12 chuỗi để chọn thứ tự xử lý}
+Giữ các cấu hình vừa chọn, ghép với \textbf{Gamma $\alpha=0,8$} hoặc
+\textbf{CLAHE clip $=1$, lưới $4\times4$}. Thử cả hai thứ tự: $3\times2\times2=12$ chuỗi.
+\par\vspace{2mm}
+{\smalltable\begin{tabular}{llcc}\toprule
+Bộ lọc & Tăng cường & Lọc $\to$ tăng cường & Tăng cường $\to$ lọc\\\midrule
+Gaussian & Gamma & \textbf{77,77} & 77,43\\
+Gaussian & CLAHE & 77,52 & \underline{77,67}\\
+Bilateral & Gamma & 76,04 & 73,34\\
+Bilateral & CLAHE & 76,75 & 74,11\\
+NLM & Gamma & 68,42 & 68,76\\
+NLM & CLAHE & 70,46 & 72,00\\\bottomrule
+\end{tabular}}
+\captionnote{Macro-F1 validation (\%), cùng cách lấy trung bình như trang trước. Giữ nguyên tham số khi đảo thứ tự.}
+\takeaway{Chọn Gaussian $5\times5$, $\sigma=0,8$ trước, rồi Gamma $\alpha=0,8$: F1 đạt 77,77\%.}
+\par\vspace{1mm}
+Khóa lựa chọn này trước khi đánh giá 12.630 ảnh test.
+Giữ cùng các mô hình ResNet-18, không huấn luyện lại theo từng cách xử lý.
+\note{Điểm 12 chuỗi lấy từ validation/selection.json và report/latex/tables/extension_validation.tex. Diffusion đối chứng cùng validation đạt 72.77 phần trăm. Cấu hình bộ lọc được chọn trước bằng kết quả độc lập. Gaussian rồi Gamma là chuỗi có điểm validation cao nhất trong các ứng viên đã thử, không phải kết luận tối ưu toàn bộ không gian tham số. Quy tắc riêng chọn cặp để nghiên cứu thứ tự dùng điểm trung bình của hai chiều: Gaussian/CLAHE có trung bình 77.60 cao hơn Gaussian/Gamma 77.60 ở số chưa làm tròn. Vì vậy full-test giữ cả hai chiều Gaussian/CLAHE cùng các đối chứng và chuỗi thắng Gaussian/Gamma. Không chọn phương pháp theo test; tập con test 430 ảnh chỉ dùng phân tích.}
 \end{frame}
 
 \paperreference{}
@@ -532,7 +560,6 @@ Gaussian & 95,30 $\pm$ 1,93 & 81,85 $\pm$ 2,61 & 68,60 $\pm$ 2,74\\
 Gaussian $\to$ Gamma & \textbf{96,70} $\pm$ 1,16 & \textbf{85,54} $\pm$ 2,49 & \underline{71,56} $\pm$ 2,01\\
 CLAHE $\to$ Gaussian & \underline{96,57} $\pm$ 1,21 & \underline{85,26} $\pm$ 2,60 & \textbf{71,77} $\pm$ 2,30\\\bottomrule\end{tabular}
 \takeaway{Gaussian rồi Gamma tăng 6,25 / 9,47 / 13,19 điểm phần trăm so không xử lý.}
-\captionnote{Dấu $\pm$: độ lệch chuẩn qua 3 mô hình. CLAHE rồi Gaussian nhỉnh hơn ở mức nặng; không dùng test để thay lựa chọn validation.}
 
 \par\vspace{2mm}Gaussian đơn lẻ cũng tăng F1: chỉ làm sáng chưa đủ trong mô hình suy giảm này.
 \note{Không khẳng định mọi bộ lọc đều có lợi hay camera thực cũng cải thiện như vậy. Full-test mức nặng Gaussian tăng 10,23pp so Identity. Nguồn: report/latex/tables/extension_fulltest.tex.}
@@ -577,11 +604,16 @@ Chỉ có 8 phương pháp mỗi mức; không đủ suy rộng thành quy luậ
 \textbf{Giữ mức làm tối Gamma 2,2; lần lượt bật/tắt Gaussian và Poisson.}\par
 So bốn trường hợp: chỉ tối, tối + Gaussian, tối + Poisson, tối + cả hai.
 \par\vspace{1mm}
-\centering\includegraphics[width=.85\linewidth,height=3.9cm,keepaspectratio]{ablation.pdf}\par
+\centering\includegraphics[width=.85\linewidth,height=3.1cm,keepaspectratio]{ablation.pdf}\par
 \raggedright
+{\fontsize{9}{11}\selectfont\setlength{\parskip}{1pt}
+\textbf{Năng lượng nhiễu kỳ vọng trên mỗi pixel/kênh, trước khi chặn về $[0,1]$:}\par
+Gaussian: $\sigma=0,01\Rightarrow E_G=\sigma^2=\mathbf{0,0001}$.\par
+Poisson: $p=60\Rightarrow E_P(U)=U/60$, với $U=X^{2,2}$ là pixel sau làm tối.\par
+Trung bình trên ảnh: $\overline{E}_P=\overline{U}/60$; phụ thuộc ảnh, không phải một hằng số.\par}
 \takeaway{MSR đạt F1 98,36\% khi chỉ tối, còn 57,84\% khi có cả hai nhiễu.}
-\captionnote{Thí nghiệm loại bỏ thành phần (ablation), cùng tập con 430 ảnh. Không kết luận loại nhiễu nào luôn hại hơn vì chưa cân bằng năng lượng nhiễu.}
-\note{Ablation giữ mô hình nhận dạng và tham số xử lý cố định; chỉ đổi thành phần suy giảm. Kết quả cho thấy không nên chỉ thử ảnh làm tối mà bỏ qua nhiễu. Nguồn: báo cáo mục 5.3, tables/ablation.tex; hình ablation.pdf.}
+\captionnote{Cùng tập con 430 ảnh. Hai loại nhiễu chưa có cùng độ mạnh, nên chưa kết luận loại nào luôn gây hại hơn.}
+\note{Ablation giữ mô hình nhận dạng và tham số xử lý cố định; chỉ đổi thành phần suy giảm. Tham số đúng theo medium trong configs/resnet18.json và fresh_run.ablation: gamma_dark=2.2, gaussian_sigma=0.01, poisson_peak=60. Năng lượng được định nghĩa là kỳ vọng bình phương sai lệch trên mỗi pixel/kênh, có điều kiện theo ảnh sau làm tối U, trước clip và trước enhancer. Gaussian có kỳ vọng sai lệch bằng 0, phương sai sigma bình phương. Poisson chuẩn hóa có kỳ vọng U và phương sai U/p. Trung bình trên ảnh là mean(U)/p. Trường hợp có cả hai có năng lượng kỳ vọng mean(U)/60+0.0001 trước clip. Ví dụ U=0.1 chỉ minh họa toán học, không phải độ sáng trung bình đo trên 430 ảnh. Sau clip, MSE thực nghiệm có thể khác và cần đo trên ảnh cụ thể; không trình bày các công thức này như MSE đã đo. Kết quả cho thấy không nên chỉ thử ảnh làm tối mà bỏ qua nhiễu. Nguồn: báo cáo mục 5.3, tables/ablation.tex; hình ablation.pdf; src/degradation.py.}
 \end{frame}
 
 \paperreference{}
@@ -593,11 +625,6 @@ Trên toàn bộ test, thứ tự CLAHE rồi Gaussian cao hơn trung bình:
 Mức suy giảm & Nhẹ & Vừa & Nặng\\\midrule
 Chênh lệch Macro-F1 (điểm \%) & +0,17 & +0,11 & +0,15\\\bottomrule
 \end{tabular}
-\par\vspace{3mm}
-\textbf{Độ chắc chắn:} lấy mẫu lại 2.000 lần để ước lượng khoảng tin cậy 95\%.
-Giữ mô hình cố định cho khoảng dương; khi lấy mẫu thêm các mô hình đã huấn luyện, cả ba khoảng đều chứa 0.
-\takeaway{Chưa đủ bằng chứng rằng một thứ tự luôn tốt hơn khi huấn luyện lại.}
-\captionnote{Giữ cùng tham số lọc và CLAHE. Cặp Gamma chỉ được so đủ hai thứ tự trên validation và tập con, không phải toàn bộ test.}
 \note{Bootstrap phân tầng theo lớp và ghép cặp theo ID ảnh; không coi noise seeds là ảnh độc lập. Chỉ có ba checkpoint, test track chưa xác minh nên CI có giới hạn. Khoảng chứa 0 không chứng minh tương đương. Nguồn: báo cáo mục 4.9; tables/order_bootstrap.tex.}
 \end{frame}
 

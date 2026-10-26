@@ -24,18 +24,18 @@ Test khảo sát & 430 & 10 ảnh/lớp cho notebook và ablation \\
 \end{table}\par
 
 
-Tập cách ly gồm 30 ảnh thuộc track có ảnh trùng pixel với tập test, theo kiểm kê được ghi trong dự án. Toàn bộ track được tách ra để tránh chỉ loại những ảnh trùng chính xác nhưng vẫn giữ các khung gần kề. Tổng số ảnh train, validation và cách ly bằng 39.209; test chính thức được giữ riêng. Hạt giống chia dữ liệu là 42.
+Nhóm tách riêng 30 ảnh thuộc track có ảnh trùng pixel với tập test. Một track là chuỗi ảnh chụp liên tiếp cùng một biển báo thực tế. Nhóm loại cả track khỏi train và validation, thay vì chỉ bỏ ảnh trùng chính xác rồi giữ lại những khung hình gần giống nó. Tổng số ảnh train, validation và cách ly vẫn là 39.209. Tập test chính thức được giữ nguyên, và nhóm dùng hạt giống 42 khi chia dữ liệu.
 
-Các tập 1.290 và 430 ảnh là những tập con của validation và test, không phải dữ liệu bổ sung. Việc lấy cùng số ảnh mỗi lớp giúp khảo sát cân bằng 43 lớp và giảm chi phí chạy nhiều phương pháp. Tuy nhiên, kết quả trên 430 ảnh không đại diện đầy đủ cho phân bố tần suất của 12.630 ảnh test; báo cáo vì thế trình bày hai phạm vi này thành các bảng riêng.
+Tập 1.290 ảnh được lấy từ validation, còn tập 430 ảnh được lấy từ test. Đây không phải dữ liệu được thêm từ nguồn khác. Nhóm lấy cùng số ảnh mỗi lớp để việc khảo sát cân bằng giữa 43 lớp và giảm thời gian thử nhiều phương pháp. Tuy nhiên, tập 430 ảnh không có cùng phân bố tần suất lớp với toàn bộ 12.630 ảnh test. Vì vậy, nhóm trình bày kết quả của hai phạm vi ở các bảng riêng.
 
 \subsection{Tiền xử lý và chuẩn hóa ảnh}
 \subsubsection{Nguồn nhãn và hình thức học}
-Gói \path{GTSRB_Final_Training_Images.zip} đã chứa ảnh và annotations; mỗi thư mục lớp có file \texttt{GT-<ClassID>.csv}. Cột \texttt{ClassId} cung cấp nhãn 0--42, các cột ROI cung cấp vị trí biển báo. Nhãn test được tải riêng trong \path{GTSRB_Final_Test_GT.zip}~\cite{gtsrbdata}. Vì vậy, không tải một file GT train riêng không đồng nghĩa với dữ liệu train không có nhãn.
+Gói \path{GTSRB_Final_Training_Images.zip} đã chứa ảnh và các tệp chú thích. Mỗi thư mục lớp có một tệp \texttt{GT-<ClassID>.csv}. Cột \texttt{ClassId} cung cấp nhãn 0--42, còn các cột ROI cung cấp tọa độ biển báo. Nhóm chỉ cần tải nhãn test riêng trong \path{GTSRB_Final_Test_GT.zip}~\cite{gtsrbdata}. Do đó, việc không có một gói ground truth train tải riêng không có nghĩa tập train thiếu nhãn.
 
-Bộ phân loại ResNet-18 học có giám sát: mỗi mẫu trả về cặp ảnh--nhãn, dùng cross-entropy và cập nhật toàn mạng. Ba enhancer học sâu chỉ nạp trọng số tác giả để suy luận; Zero-DCE gốc có cơ chế zero-reference, nhưng điều đó không làm bài toán phân loại GTSRB của dự án trở thành học không giám sát. Các thuật toán truyền thống không có bước huấn luyện.
+Nhóm huấn luyện ResNet-18 theo cách học có giám sát. Mỗi mẫu gồm một ảnh và nhãn lớp, mô hình sử dụng cross-entropy để cập nhật trọng số trên toàn mạng. Với ba mô hình tăng cường học sâu, nhóm chỉ nạp trọng số pretrained do tác giả công bố để suy luận. Zero-DCE gốc có cách học không cần ảnh tham chiếu ghép cặp, nhưng đặc điểm đó không làm bài toán phân loại GTSRB của nhóm trở thành học không giám sát. Những phương pháp xử lý ảnh truyền thống không cần huấn luyện.
 
 \subsubsection{Cắt vùng quan tâm}
-Vùng quan tâm (Region of Interest, ROI) được xác định bằng tọa độ chú thích của dữ liệu. Dự án mở rộng vùng này thêm 5\% kích thước theo mỗi phía, đồng thời giới hạn khung cắt trong kích thước ảnh. Phần lề nhỏ giúp giữ đường viền biển báo và một lượng ngữ cảnh xung quanh; nếu cắt sát quá mức, những pixel biên có thể bị loại bỏ trước khi thuật toán tăng cường hoạt động.
+Vùng quan tâm (Region of Interest, ROI) được xác định bằng tọa độ chú thích của dữ liệu. Dự án mở rộng vùng này thêm 5\% kích thước theo mỗi phía, đồng thời giới hạn khung cắt trong kích thước ảnh. Phần lề nhỏ giúp giữ đường viền biển báo và một lượng ngữ cảnh xung quanh. Nếu cắt sát quá mức, những pixel biên có thể bị loại bỏ trước khi thuật toán tăng cường hoạt động.
 
 Với ROI $(x_1,y_1,x_2,y_2)$ có điểm cuối bao gồm trong vùng, mã nguồn chuyển $x_2,y_2$ sang mốc cuối không bao gồm bằng cách cộng 1. Sau đó tính độ mở rộng theo chiều rộng và chiều cao, làm tròn ra ngoài bằng phép lấy sàn/lấy trần và chặn tại biên ảnh. Quy ước này tránh bỏ mất hàng hoặc cột pixel cuối cùng khi cắt bằng thư viện ảnh.
 
@@ -49,6 +49,7 @@ Nội suy song tuyến tính sử dụng tổ hợp có trọng số của các 
 Các thuật toán làm việc với số thực \texttt{float32}. Riêng HE và CLAHE chuyển ảnh sang số nguyên 8 bit để dùng các phép xử lý histogram của OpenCV rồi chuyển trở lại số thực. Việc lượng tử hóa ở hai phương pháp này là một phần của cách cài đặt, cần được phân biệt với các phương pháp thực hiện trực tiếp trên giá trị liên tục.
 
 \subsection{Mô hình suy giảm thiếu sáng}
+\begin{samepage}
 Mô hình suy giảm được áp dụng theo thứ tự cố định: Gamma làm tối, nhiễu Poisson, nhiễu Gaussian và cuối cùng chặn về $[0,1]$. Với một pixel của ảnh gốc $X$, quá trình được mô tả bởi:
 \begin{align}
 U &= X^{\gamma_d},\label{eq:dark}\\
@@ -56,10 +57,11 @@ V &= \frac{\mathcal{P}(pU)}{p},\label{eq:poisson}\\
 Y &= \operatorname{clip}\bigl(V+\varepsilon,0,1\bigr),\quad
 \varepsilon\sim\mathcal{N}(0,\sigma_n^2).\label{eq:degradation}
 \end{align}
-Trong đó $\gamma_d>1$ điều khiển mức tối, $p$ là hệ số Poisson và $\sigma_n$ là độ lệch chuẩn nhiễu Gaussian. Phép lũy thừa áp dụng theo từng kênh RGB trong miền ảnh chuẩn hóa; đây là mô hình suy giảm tổng hợp, không phải mô phỏng đầy đủ quá trình thu nhận ánh sáng của cảm biến RAW.
+\end{samepage}
+Trong đó $\gamma_d>1$ điều khiển mức tối, $p$ là hệ số Poisson và $\sigma_n$ là độ lệch chuẩn nhiễu Gaussian. Phép lũy thừa áp dụng theo từng kênh RGB trong miền ảnh chuẩn hóa. Đây là mô hình suy giảm tổng hợp, không phải mô phỏng đầy đủ quá trình thu nhận ánh sáng của cảm biến RAW.
 
 \subsubsection{Vai trò của Gamma làm tối}
-Với $0<X<1$ và $\gamma_d>1$, ta có $X^{\gamma_d}<X$. Khi tăng $\gamma_d$, vùng trung gian bị kéo về cường độ thấp mạnh hơn. Ví dụ, một pixel có cường độ 0,5 trở thành khoảng 0,354; 0,218 và 0,125 khi $\gamma_d$ lần lượt bằng 1,5; 2,2 và 3,0. Điểm đen 0 và điểm trắng 1 vẫn được giữ ở hai đầu miền.
+Với $0<X<1$ và $\gamma_d>1$, ta có $X^{\gamma_d}<X$. Khi tăng $\gamma_d$, vùng trung gian bị kéo về cường độ thấp mạnh hơn. Ví dụ, một pixel có cường độ 0,5 trở thành khoảng 0,354, 0,218 và 0,125 khi $\gamma_d$ lần lượt bằng 1,5, 2,2 và 3,0. Điểm đen 0 và điểm trắng 1 vẫn được giữ ở hai đầu miền.
 
 Điều này giải thích vì sao ảnh tối có histogram dịch về bên trái mà vùng phản xạ rất sáng vẫn có thể còn rõ. Phép Gamma tạo được nhiều mức suy giảm với tham số dễ kiểm soát, đồng thời vẫn giữ quan hệ xác định giữa ảnh gốc và ảnh tối khi chưa thêm nhiễu.
 
@@ -88,19 +90,19 @@ Nặng (severe) & 3,0 & 30 & 0,020 \\
 Ba mức trong Bảng~\ref{tab:degrade} thay đổi đồng thời độ tối và hai thành phần nhiễu. Vì vậy, sự chênh lệch giữa mức nhẹ và mức nặng phản ánh tổng tác động của cả ba yếu tố. Muốn xác định riêng ảnh hưởng của nhiễu, cần dùng thí nghiệm ablation giữ nguyên Gamma và lần lượt bật/tắt từng loại nhiễu, được trình bày ở phần thảo luận.
 
 \subsubsection{Nhiễu sau nội suy và giới hạn mô hình}
-Nghiên cứu cắt và resize ảnh gốc về $64\times64$ trước khi sinh nhiễu. Gọi $R$ là toán tử lấy mẫu lại và $S$ là phép suy giảm, đầu vào đang xét là $S(R(X))$, khác với $R(S(X))$. Với nhiễu cộng độc lập ở độ phân giải nguồn, một pixel nội suy $\sum_j w_j(X_j+\varepsilon_j)$ có phương sai nhiễu $\sigma^2\sum_j w_j^2$; các pixel đầu ra dùng chung lân cận còn có thể tương quan. Trong khi đó, thêm Gaussian sau resize dùng phương sai $\sigma_n^2$ trực tiếp tại từng pixel crop. Poisson phụ thuộc tín hiệu và Gamma phi tuyến càng khiến hai thứ tự không tương đương.
+Nghiên cứu cắt và resize ảnh gốc về $64\times64$ trước khi sinh nhiễu. Gọi $R$ là toán tử lấy mẫu lại và $S$ là phép suy giảm, đầu vào đang xét là $S(R(X))$, khác với $R(S(X))$. Với nhiễu cộng độc lập ở độ phân giải nguồn, một pixel nội suy $\sum_j w_j(X_j+\varepsilon_j)$ có phương sai nhiễu $\sigma^2\sum_j w_j^2$. Các pixel đầu ra dùng chung lân cận còn có thể tương quan. Trong khi đó, thêm Gaussian sau resize dùng phương sai $\sigma_n^2$ trực tiếp tại từng pixel crop. Poisson phụ thuộc tín hiệu và Gamma phi tuyến càng khiến hai thứ tự không tương đương.
 
-Thiết kế này giữ kích thước và mức nhiễu đầu vào thống nhất để cô lập ảnh hưởng của tiền xử lý. Nó không tái hiện chuỗi cảm biến RAW, giải khảm màu, xử lý tín hiệu, nội suy và nén của camera. Gaussian đơn giản có thể phù hợp với một thành phần được tạo trực tiếp trong mô hình, nên lợi ích đo được chưa chứng minh ưu thế với nhiễu đã qua xử lý camera. Chưa có ablation đổi vị trí sinh nhiễu hoặc độ phân giải để định lượng độ lệch này; không suy diễn mức độ ảnh hưởng chỉ từ lập luận lý thuyết.
+Thiết kế này giữ kích thước và mức nhiễu đầu vào thống nhất để cô lập ảnh hưởng của tiền xử lý. Nó không tái hiện chuỗi cảm biến RAW, giải khảm màu, xử lý tín hiệu, nội suy và nén của camera. Gaussian đơn giản có thể phù hợp với một thành phần được tạo trực tiếp trong mô hình, nên lợi ích đo được chưa chứng minh ưu thế với nhiễu đã qua xử lý camera. Nhóm chưa thực hiện ablation để thay đổi vị trí sinh nhiễu hoặc độ phân giải. Vì vậy, nhóm chưa định lượng được độ lệch này và không suy ra mức ảnh hưởng chỉ từ lập luận lý thuyết.
 
 \subsection{Khảo sát histogram và cấu trúc ảnh}
 \fig{degradation.png}{1}{Ảnh tham chiếu và ba mức suy giảm trên cùng một crop validation. Hàng dưới là histogram cường độ xám; trục đứng biểu thị số pixel. Hình trích trực tiếp từ notebook ResNet-18, noise seed 101.}{fig:degradation}
-Quan sát Hình~\ref{fig:degradation}, vùng nền sáng của biển báo suy giảm rõ khi tăng mức tối. Các nét số trở nên khó phân biệt với nền và nhiễu màu xuất hiện trên cả vùng tương đối đồng nhất. Histogram tập trung ngày càng nhiều tại cường độ thấp; độ tương phản giữa các cấu trúc hữu ích không thể được suy ra chỉ từ việc histogram còn trải rộng đến gần 1.
+Quan sát Hình~\ref{fig:degradation}, vùng nền sáng của biển báo suy giảm rõ khi tăng mức tối. Các nét số trở nên khó phân biệt với nền và nhiễu màu xuất hiện trên cả vùng tương đối đồng nhất. Histogram tập trung ngày càng nhiều tại cường độ thấp. Độ tương phản giữa các cấu trúc hữu ích không thể được suy ra chỉ từ việc histogram còn trải rộng đến gần 1.
 
-Trên riêng ảnh minh họa này, PSNR của mức nhẹ, vừa và nặng lần lượt là 17,2577; 12,0942; 9,5306 dB. SSIM tương ứng là 0,7120; 0,5494; 0,3855. Đây là số đo của một ảnh validation được chọn theo quy tắc trong notebook, không phải giá trị trung bình của toàn bộ tập test.
+Trên riêng ảnh minh họa này, PSNR của mức nhẹ, vừa và nặng lần lượt là 17,2577, 12,0942 và 9,5306 dB. SSIM tương ứng là 0,7120, 0,5494 và 0,3855. Đây là số đo của một ảnh validation được chọn theo quy tắc trong notebook, không phải giá trị trung bình của toàn bộ tập test.
 
 Histogram chỉ biểu diễn tần suất cường độ, không chứa vị trí của pixel. Hai ảnh có histogram gần nhau vẫn có thể khác hoàn toàn về bố trí đường viền hoặc chữ số. Vì vậy, phân tích histogram trong báo cáo luôn đi kèm quan sát ảnh, SSIM và kết quả nhận dạng, tránh kết luận chất lượng chỉ từ sự dịch chuyển phân bố mức xám.
 
 \subsection{Bảo đảm điều kiện so sánh công bằng}
 Hạt giống sinh nhiễu được xác định từ noise seed, mã mẫu và tên điều kiện. Ba noise seed là 101, 202 và 303. Với cùng mã ảnh, cùng mức suy giảm và cùng noise seed, tất cả các phương pháp nhận đúng một ảnh tối. Cách thiết kế này tránh việc một thuật toán vô tình được đánh giá trên nhiễu nhẹ hơn thuật toán khác.
 
-Ảnh gốc chỉ được sử dụng để tính chất lượng sau tăng cường. Nhãn lớp chỉ phục vụ huấn luyện bộ nhận dạng, chọn tham số bằng validation và tính metric. Các tập con, cấu hình và checkpoint được khóa trước test. Những ràng buộc này giúp quy kết thay đổi kết quả chủ yếu cho phép xử lý ảnh đang khảo sát trong phạm vi giao thức đã định.
+Trong bước đánh giá phép tăng cường, ảnh gốc đóng vai trò tham chiếu để tính chất lượng đầu ra. Thuật toán xử lý không được nhận ảnh gốc hoặc nhãn lớp. Nhóm dùng nhãn để huấn luyện bộ nhận dạng, lựa chọn tham số trên validation và tính các chỉ số đánh giá. Các tập con, cấu hình và checkpoint được cố định trước khi chạy test. Nhờ vậy, nhóm có thể so sánh tác động của các phép xử lý trong cùng điều kiện, dù kết quả vẫn phụ thuộc mô hình và phạm vi dữ liệu đã chọn.

@@ -4,7 +4,7 @@ Mã nguồn: [GTSRB-Low-Light-Preprocessing](https://github.com/kttt294/GTSRB-Lo
 
 Demo: [image-preprocessing.techvi.io.vn](https://image-preprocessing.techvi.io.vn), có liên kết bấm được trên trang đầu và slide website demo.
 
-33 slide tiếng Việt, tỉ lệ 16:9, khoảng 20–25 phút tùy thời lượng giải thích phương pháp. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
+34 slide tiếng Việt, tỉ lệ 16:9, khoảng 20–25 phút tùy thời lượng giải thích phương pháp. Thiết kế theo phong cách bài giảng: nền trắng, dải tiêu đề xám nhạt, tiêu đề màu xanh dương, footer mỏng gồm bốn ô: Nhóm 2, Xử lý ảnh, trích dẫn paper (nếu có) và số trang. Nội dung tập trung xử lý ảnh, toàn bộ kết quả nhận dạng dùng ResNet-18.
 
 - `main.tex`: mã nguồn LaTeX, có ghi chú `\note{...}` cho từng slide.
 - `../thuyet_trinh.pdf`: bản trình chiếu cuối.
@@ -40,4 +40,4 @@ Thanh footer chỉ hiển thị paper liên quan theo tác giả, hội nghị/t
 
 ## Cách đọc slide
 
-Mỗi trang nêu rõ cơ chế, cách áp dụng trong dự án và ý nghĩa hoặc giới hạn. Các mục dữ liệu giải thích ROI, lề 5%, track và cách ly; hai trang mô phỏng phân biệt từng bước với ba mức suy giảm. Phần đánh giá nêu kết quả ảnh gốc, giới hạn của mô hình cố định và cách hiểu PSNR/SSIM so với Accuracy/Macro-F1. Ảnh demo nằm ở trang 32, kèm liên kết trực tiếp.
+Mỗi trang nêu rõ cơ chế, cách áp dụng trong dự án và ý nghĩa hoặc giới hạn. Các mục dữ liệu giải thích ROI, lề 5%, track và cách ly; hai trang mô phỏng phân biệt từng bước với ba mức suy giảm. Phần đánh giá nêu kết quả ảnh gốc, giới hạn của mô hình cố định và cách hiểu PSNR/SSIM so với Accuracy/Macro-F1. Ảnh demo nằm ở trang 33, kèm liên kết trực tiếp.

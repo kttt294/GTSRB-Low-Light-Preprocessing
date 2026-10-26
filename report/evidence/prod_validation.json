@@ -1,7 +1,7 @@
 {
   "branch": "main",
-  "pdf_pages": 44,
-  "pdf_sha256": "1937c43f93e9f0ab55c95542a8b45881e05f8342b5dea255d349e0c8deb16315",
+  "pdf_pages": 46,
+  "pdf_sha256": "bdd9e87f3da743f941b6048ca9914d945f3dc7e675c1001285542008236764d5",
   "latex_reference_or_overflow_errors": [],
   "unit_tests_passed": 38,
   "notebook_schema_valid": true,
@@ -11,7 +11,7 @@
   "fulltest_raw_predictions_verified": true,
   "real_lowlight_evaluated": false,
   "colab_gpu_pipeline_executed": false,
-  "visual_review": "All 42 pages reviewed in contact sheets; enlarged matrices, paired CI table, corrected notation and two-input pipeline inspected at full size.",
+  "visual_review": "All pages reviewed in contact sheets, with full-page inspection of the revised matrix layout. Equations, table sources and citations checked against the previous report.",
   "notebook_executed_preserved": true,
   "kaggle_notebook_public": true,
   "kaggle_execution_started": true,
@@ -51,8 +51,8 @@
   "direct_zip_public_download_verified": true,
   "direct_zip_download_verified_on_kaggle": true,
   "baseline_reuse_verified_on_kaggle": true,
-  "slides_pages": 33,
-  "slides_sha256": "1bb993cadb59d6941bc27a9d28eb3a8b696fe599f84496f4cccf7bd5659a73dc",
+  "slides_pages": 34,
+  "slides_sha256": "f3fbcb81353d359af8a01c9eed982d3e3057e6c5ad39395ec0ceaae871462ecc",
   "all_scope_raw_prediction_rows_recomputed": 5847990,
   "report_current_evidence": "report/evidence/final/",
   "report_chosen_pipeline": "Gaussian 5x5 sigma0.8 then Gamma0.8",
@@ -62,7 +62,7 @@
   "kaggle_embedded_source_config_files": 22,
   "presentation_clahe_clip_limit": 1,
   "speaker_notes_local_only": true,
-  "speaker_notes_slides": 33,
+  "speaker_notes_slides": 34,
   "repository": "https://github.com/kttt294/GTSRB-Low-Light-Preprocessing",
   "report_repository_link_verified": true,
   "visual_error_examples": 6,
@@ -80,10 +80,10 @@
   "slides_demo_link_verified": true,
   "demo_screenshot_count": 4,
   "demo_screenshot_pdf_pages": [
-    40,
-    41
+    42,
+    43
   ],
   "demo_screenshot_visual_review": "Four original screenshots checked; two figures per page, captions and website link verified.",
-  "slides_demo_screenshot_page": 32,
+  "slides_demo_screenshot_page": 33,
   "slides_degradation_layout_verified": true
 }
